@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DOTPATH=~/.dotfiles
+DOTPATH=~/dotfiles
 USER=tamanobi
 
 # git が使えるなら git
@@ -27,7 +27,7 @@ else
     die "curl or wget required"
 fi
 
-cd ~/.dotfiles
+cd $HOME/$DOTPATH
 if [ $? -ne 0 ]; then
     die "not found: $DOTPATH"
 fi
@@ -37,6 +37,6 @@ for f in .??*
 do
     [ "$f" = ".git" ] && continue
     [ "$f" = ".DS_Store" ] && continue
-
-    ln -snfv "$DOTPATH/$f" "$HOME/$f"
+    # 上書きするときは確認する
+    ln -sniv "$DOTPATH/$f" "$HOME/$f"
 done
