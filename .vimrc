@@ -72,24 +72,46 @@ if has('vim_starting')
    set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
-" NeoBundleを初期化
-call neobundle#begin(expand('~/.vim/bundle/'))
+" dein
+if &compatible
+   set nocompatible
+endif
+set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
 
-" インストールするプラグインをここに記述
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimfiler'
-NeoBundle 'scrooloose/syntastic'
-NeoBundle 'editorconfig/editorconfig-vim'
-NeoBundle 'tyru/open-browser.vim'
-NeoBundle 'terryma/vim-multiple-cursors'
-NeoBundle 'kovisoft/slimv.git'
-let g:syntastic_javascript_checkers=['eslint']
-let g:syntastic_python_checkers = ['flake8']
-let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp\""'
-" 検索系
-let g:netrw_nogx = 1
+call dein#begin(expand('~/.vim/dein'))
+"call dein#add({path to dein.vim directory})
+call dein#add('Shougo/dein.vim')
+call dein#add('Shougo/vimproc.vim')
+call dein#add('Shougo/neocomplete.vim')
+call dein#add('Shougo/neomru.vim')
+call dein#add('Shougo/neosnippet.vim')
+call dein#add('Shougo/unite.vim')
+call dein#add('Shougo/vimfiler')
+call dein#add('scrooloose/syntastic')
+call dein#add('editorconfig/editorconfig-vim')
+call dein#add('tyru/open-browser.vim')
+call dein#add('terryma/vim-multiple-cursors')
+call dein#add('kovisoft/slimv.git')
+call dein#end()
 
-call neobundle#end()
+"" NeoBundleを初期化
+"call neobundle#begin(expand('~/.vim/bundle/'))
+"
+"" インストールするプラグインをここに記述
+"NeoBundle 'Shougo/unite.vim'
+"NeoBundle 'Shougo/vimfiler'
+"NeoBundle 'scrooloose/syntastic'
+"NeoBundle 'editorconfig/editorconfig-vim'
+"NeoBundle 'tyru/open-browser.vim'
+"NeoBundle 'terryma/vim-multiple-cursors'
+"NeoBundle 'kovisoft/slimv.git'
+"let g:syntastic_javascript_checkers=['eslint']
+"let g:syntastic_python_checkers = ['flake8']
+"let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp\""'
+"" 検索系
+"let g:netrw_nogx = 1
+"
+"call neobundle#end()
 
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
