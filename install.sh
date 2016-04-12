@@ -35,11 +35,15 @@ if [ $? -ne 0 ]; then
 fi
 
 # 移動できたらリンクを実行する
-for f in .??*
+for f in .??*;
 do
-    [ "$f" = ".git" ] && continue
-    [ "$f" = ".DS_Store" ] && continue
-    # 上書きするときは確認する
-    # ln -sniv "$DOTPATH/$f" "$HOME/$f"
-    echo "$f"
+  if [ $f == .CFUserTextEncoding ]; then continue
+  fi
+  if [ $f == .git ]; then continue
+  fi
+  if [ $f == .DS_Store ]; then continue
+  fi
+  # 上書きするときは確認する
+  # ln -sniv "$DOTPATH/$f" "$HOME/$f"
+  echo $DOTPATH/$f "---" $HOME/$f;
 done
