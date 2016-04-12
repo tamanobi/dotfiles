@@ -4,7 +4,7 @@ DOTPATH=./dotfiles
 USER=tamanobi
 
 # git が使えるなら git
-if hash "git"; then
+if type "git"; then
     git clone --recursive "$GITHUB_URL" "$DOTPATH"
 
 # 使えない場合は curl か wget を使用する
