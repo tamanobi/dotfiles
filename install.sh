@@ -1,21 +1,21 @@
 #!/bin/sh
 
-DOTPATH=~/dotfiles
+DOTPATH=./dotfiles
 USER=tamanobi
 
 # git が使えるなら git
-if has "git"; then
+if hash "git"; then
     git clone --recursive "$GITHUB_URL" "$DOTPATH"
 
 # 使えない場合は curl か wget を使用する
-elif has "curl" || has "wget"; then
+elif type "curl" 2>&1 || type "wget" 2>&1; then
     tarball="https://github.com/$USER/dotfiles/archive/master.tar.gz"
     
     # どっちかでダウンロードして，tar に流す
-    if has "curl"; then
+    if type "curl" 2>&1; then
         curl -L "$tarball"
 
-    elif has "wget"; then
+    elif type "wget" 2>&1; then
         wget -O - "$tarball"
 
     fi | tar xv -
@@ -24,12 +24,14 @@ elif has "curl" || has "wget"; then
     mv -f dotfiles-master "$DOTPATH"
 
 else
-    die "curl or wget required"
+    echo  "curl or wget required" >&2
+    exit 48
 fi
 
 cd $HOME/$DOTPATH
 if [ $? -ne 0 ]; then
-    die "not found: $DOTPATH"
+    echo "not found: $DOTPATH" >&2
+    exit 2
 fi
 
 # 移動できたらリンクを実行する
@@ -38,5 +40,6 @@ do
     [ "$f" = ".git" ] && continue
     [ "$f" = ".DS_Store" ] && continue
     # 上書きするときは確認する
-    ln -sniv "$DOTPATH/$f" "$HOME/$f"
+    # ln -sniv "$DOTPATH/$f" "$HOME/$f"
+    echo "$f"
 done
