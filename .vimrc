@@ -55,7 +55,7 @@ noremap! <C-E> <End>
 noremap! <C-F> <Right>
 noremap! <C-B> <Left>
 noremap! <C-D> <Del>
-"
+" 移動
 nnoremap <C-H> ^
 nnoremap <C-L> $
 inoremap <C-L> <ESC>
