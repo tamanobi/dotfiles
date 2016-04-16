@@ -8,11 +8,14 @@ set shiftwidth=2
 set scrolloff=1000
 set ignorecase
 set wrapscan
+set noswapfile
+set nobackup
 set smarttab
 set expandtab
 set autoindent
 set smartindent
 set hlsearch
+set incsearch
 set laststatus=2
 "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
@@ -84,7 +87,7 @@ call dein#add('Shougo/dein.vim')
 call dein#add('Shougo/vimproc.vim')
 call dein#add('Shougo/neocomplete.vim')
 call dein#add('Shougo/neomru.vim')
-call dein#add('Shougo/neosnippet.vim')
+"call dein#add('Shougo/neosnippet.vim')
 call dein#add('Shougo/unite.vim')
 call dein#add('Shougo/vimfiler')
 call dein#add('scrooloose/syntastic')
@@ -93,25 +96,30 @@ call dein#add('tyru/open-browser.vim')
 call dein#add('terryma/vim-multiple-cursors')
 call dein#add('kovisoft/slimv.git')
 call dein#end()
-
-"" NeoBundleを初期化
-"call neobundle#begin(expand('~/.vim/bundle/'))
-"
-"" インストールするプラグインをここに記述
-"NeoBundle 'Shougo/unite.vim'
-"NeoBundle 'Shougo/vimfiler'
-"NeoBundle 'scrooloose/syntastic'
-"NeoBundle 'editorconfig/editorconfig-vim'
-"NeoBundle 'tyru/open-browser.vim'
-"NeoBundle 'terryma/vim-multiple-cursors'
-"NeoBundle 'kovisoft/slimv.git'
-"let g:syntastic_javascript_checkers=['eslint']
-"let g:syntastic_python_checkers = ['flake8']
-"let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp\""'
-"" 検索系
-"let g:netrw_nogx = 1
-"
-"call neobundle#end()
+" ------------------------------------- 
+" Unite settings
+let g:unite_enable_start_insert=1
+" バッファ一覧
+nnoremap <C-P> :Unite buffer<CR>
+" ファイル一覧
+nnoremap <C-N> :Unite -buffer-name=file file<CR>
+" MRU
+nnoremap <C-Z> :Unite file_mru<CR>
+au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
+au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
+" ------------------------------------- 
+let g:syntastic_javascript_checkers=['eslint']
+let g:syntastic_python_checkers = ['flake8']
+let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp\""'
+" 検索系
+let g:netrw_nogx = 1
 
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
+
+nnoremap <silent> ,g :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
+if executable('pt')
+  let g:unite_source_grep_command = 'pt'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor'
+  let g:unite_source_grep_recursive_opt = ''
+endif

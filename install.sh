@@ -1,34 +1,37 @@
 #!/bin/sh
 
-DOTPATH=./dotfiles
+DOTPATH=~/dotfiles
 USER=tamanobi
 
+function has () {
+  type "$1" > /dev/null 2>&1
+}
+
 # git が使えるなら git
-if type "git"; then
+if has "git"; then
     git clone --recursive "$GITHUB_URL" "$DOTPATH"
 
 # 使えない場合は curl か wget を使用する
-elif type "curl" 2>&1 || type "wget" 2>&1; then
+elif has "curl" || has "wget"; then
     tarball="https://github.com/$USER/dotfiles/archive/master.tar.gz"
     
     # どっちかでダウンロードして，tar に流す
-    if type "curl" 2>&1; then
+    if has "curl"; then
         curl -L "$tarball"
 
-    elif type "wget" 2>&1; then
+    elif has "wget"; then
         wget -O - "$tarball"
 
     fi | tar xv -
     
     # 解凍したら，DOTPATH に置く
     mv -f dotfiles-master "$DOTPATH"
-
 else
     echo  "curl or wget required" >&2
     exit 48
 fi
 
-cd $HOME/$DOTPATH
+cd $DOTPATH
 if [ $? -ne 0 ]; then
     echo "not found: $DOTPATH" >&2
     exit 2

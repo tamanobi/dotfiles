@@ -1,6 +1,6 @@
 # Created by newuser for 5.0.5
 # -------------------------------------
- 環境変数
+# 環境変数
 # -------------------------------------
 
 # SSHで接続した先で日本語が使えるようにする
@@ -14,14 +14,13 @@ export EDITOR=/usr/local/bin/vim
 export PAGER=/usr/local/bin/vimpager
 export MANPAGER=/usr/local/bin/vimpager
 
-
 # -------------------------------------
 # zshのオプション
 # -------------------------------------
 
 ## 補完機能の強化
 autoload -U compinit
-compinit
+compinit -u
 
 ## 入力しているコマンド名が間違っている場合にもしかして：を出す。
 setopt correct
@@ -133,7 +132,14 @@ alias l1="ls -1"
 # tree
 alias tree="tree -NC" # N: 文字化け対策, C:色をつける
 
-
+# git alias
+alias gg="git grep"
+alias g="git"
+alias v="vim"
+alias gs="git status"
+alias gco="git checkout"
+alias gcm="git commit"
+alias glg="git log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s"
 # -------------------------------------
 # キーバインド
 # -------------------------------------
@@ -161,3 +167,43 @@ function chpwd() { ls -1 }
 function title {
     echo -ne "\033]0;"$*"\007"
 }
+
+function pv(){
+  path=$(pt $* | peco | awk -F: '{printf  $1 " +" $2}'| sed -e 's/\+$//')
+  if [ -n "$path" ]; then
+    echo "vim $path"
+    vim $path
+  fi  
+}
+
+function peco-dir-open-app () {
+    find . | peco | xargs sh -c 'vim "$0" < /dev/tty'
+    zle clear-screen
+}
+zle -N peco-dir-open-app
+bindkey '^xt' peco-dir-open-app     # C-x t
+
+# git directory
+function peco-git-dir-open-app () {
+    git ls-files | peco | xargs sh -c 'vim "$0" < /dev/tty'
+    zle clear-screen
+}
+zle -N peco-git-dir-open-app
+bindkey '^o' peco-git-dir-open-app     # C-o
+
+# ヒストリー
+function peco-select-history() {
+    local tac
+    if which tac > /dev/null; then
+        tac="tac"
+    else
+        tac="tail -r"
+    fi
+    BUFFER=$(\history -n 1 | \
+        eval $tac | \
+        peco --query "$LBUFFER")
+    CURSOR=$#BUFFER
+    zle clear-screen
+}
+zle -N peco-select-history
+bindkey '^r' peco-history-selection
