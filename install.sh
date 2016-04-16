@@ -37,7 +37,7 @@ if [ $? -ne 0 ]; then
     exit 2
 fi
 
-# 移動できたらリンクを実行する
+# 移動できたらシンボリックリンクを貼る
 for f in .??*;
 do
   if [ $f == .CFUserTextEncoding ]; then continue
@@ -46,7 +46,7 @@ do
   fi
   if [ $f == .DS_Store ]; then continue
   fi
-  # 上書きするときは確認する
-  # ln -sniv "$DOTPATH/$f" "$HOME/$f"
+  # 上書きする
   echo $DOTPATH/$f "---" $HOME/$f;
+  ln -snfv "$DOTPATH/$f" "$HOME/$f"
 done
