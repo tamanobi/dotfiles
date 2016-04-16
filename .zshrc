@@ -140,7 +140,8 @@ alias gs="git status"
 alias gco="git checkout"
 alias gcm="git commit"
 alias glg="git log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s"
-alias -g B='`git branch | peco | sed -e "s/^\*[ ]*//g"`'
+alias gb="git for-each-ref --sort=committerdate --format='%(refname:short)' refs/heads/"
+alias -g B='`gb | peco | sed -e "s/^\*[ ]*//g" | awk "{print \$1}`'
 # -------------------------------------
 # キーバインド
 # -------------------------------------
