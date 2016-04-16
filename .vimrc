@@ -131,14 +131,15 @@ call dein#end()
 " ------------------------------------- 
 " Unite settings
 let g:unite_enable_start_insert=1
-" バッファ一覧
-nnoremap <C-P> :Unite buffer<CR>
-" ファイル一覧
-nnoremap <C-N> :Unite -buffer-name=file file<CR>
 " MRU
 nnoremap <C-Z> :Unite file_mru<CR>
 au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
 au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
+let g:unite_source_file_mru_limit = 200
+nnoremap <silent> ,ub :<C-u>Unite buffer<CR>
+nnoremap <silent> ,uf :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> ,ur :<C-u>Unite -buffer-name=register register<CR>
+nnoremap <silent> ,uu :<C-u>Unite file_mru buffer<CR>
 " ------------------------------------- 
 let g:syntastic_javascript_checkers=['eslint']
 let g:syntastic_python_checkers = ['flake8']
