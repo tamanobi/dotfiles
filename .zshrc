@@ -152,9 +152,9 @@ function cdup() {
    zle reset-prompt
 }
 zle -N cdup
-bindkey '^K' cdup
+#bindkey '^K' cdup
 
-bindkey "^R" history-incremental-search-backward
+#bindkey "^R" history-incremental-search-backward
 
 # -------------------------------------
 # その他
@@ -169,10 +169,10 @@ function title {
 }
 
 function pv(){
-  path=$(pt $* | peco | awk -F: '{printf  $1 " +" $2}'| sed -e 's/\+$//')
-  if [ -n "$path" ]; then
-    echo "vim $path"
-    vim $path
+  local file
+  file=$(pt $@ | peco | awk -F: '{printf  $1 " -c" $2}'| sed -e 's/\-c$//')
+  if [ -n ${#file} ]; then
+    eval 'vim ${=file}'
   fi  
 }
 
