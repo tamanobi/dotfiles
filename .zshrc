@@ -104,7 +104,7 @@ function vcs_prompt_info() {
 # end VCS
 
 OK="^_^ "
-NG="X_X "
+NG=">_< "
 
 PROMPT=""
 PROMPT+="%(?.%F{green}$OK%f.%F{red}$NG%f) "
@@ -140,8 +140,8 @@ alias gs="git status"
 alias gco="git checkout"
 alias gcm="git commit"
 alias glg="git log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s"
-alias gb="git for-each-ref --sort=committerdate --format='%(refname:short)' refs/heads/"
-alias -g B='`gb | peco | sed -e "s/^\*[ ]*//g" | awk "{print \$1}`'
+alias gb="git for-each-ref --sort='-*committerdate' --format='%(refname:short)' refs/heads/"
+alias -g B='`gb | peco | sed -e "s/^\* //g" | awk "{print $1}"`'
 # -------------------------------------
 # キーバインド
 # -------------------------------------
