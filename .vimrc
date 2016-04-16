@@ -1,6 +1,5 @@
 scriptencoding utf-8
 set encoding=utf-8
-"colorscheme elflord
 colorscheme desert
 set title
 syntax on
@@ -20,9 +19,29 @@ set hlsearch
 set incsearch
 set mouse=a
 hi CursorLineNr term=bold   cterm=BOLD ctermfg=228 ctermbg=8
+set list
+set listchars=tab:>-,extends:<,trail:-
 set laststatus=2
+" -------------------------------------------------------------
+" STATUS LINE
 "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
-set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+" set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+" file number
+set statusline=[%n]
+"ホスト名表示
+set statusline+=%{matchstr(hostname(),'\\w\\+')}@
+" file name
+set statusline+=\ %<%F
+set statusline+=\ %m%r%h%w
+set statusline+=\ [%{&fileformat}]
+"文字コード表示
+set statusline+=[%{has('multi_byte')&&\&fileencoding!=''?&fileencoding:&encoding}]
+"ファイルタイプ表示
+set statusline+=%y
+set statusline+=%=\ %l/%L\ 
+"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [line=%04l,%04v][%p%%]%=\[FORMAT=%{&ff}]\[ENC=%{&fileencoding}]\[ROW=%l/%L] 
+" -------------------------------------------------------------
+set showcmd
 set showmatch
 set matchtime=1
 set display=lastline
@@ -36,6 +55,9 @@ source ~/.vim/dailymemo.vim
 let mapleader = "\<Space>"
 " save file
 nnoremap <Leader>w :w<CR>
+" quit edit
+nnoremap <Leader>x :q!<CR>
+nnoremap <Leader>o :Unite -buffer-name=file file<CR>
 
 " Key Map
 inoremap {<Enter> {}<Left><CR><ESC><S-o>
@@ -62,10 +84,10 @@ noremap! <C-A> <Home>
 noremap! <C-E> <End>
 noremap! <C-F> <Right>
 noremap! <C-B> <Left>
-noremap! <C-D> <Del>
 " 移動
 nnoremap <C-H> ^
 nnoremap <C-L> $
+inoremap <C-H> <BS>
 inoremap <C-L> <ESC>
 " magic
 nnoremap / /\v
