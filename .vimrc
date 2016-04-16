@@ -30,9 +30,13 @@ set wildmenu wildmode=list:full
 set nospell
 set cursorline
 
+" for memo
 source ~/.vim/dailymemo.vim
 
-"source ~/.vim/localrc.vim
+let mapleader = "\<Space>"
+" save file
+nnoremap <Leader>w :w<CR>
+
 " Key Map
 inoremap {<Enter> {}<Left><CR><ESC><S-o>
 inoremap [<Enter> []<Left><CR><ESC><S-o>
@@ -70,6 +74,8 @@ nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
+inoremap <C-w> <ESC>bcw
+" ブラウザを開く
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 vnoremap <C-n> y:MultipleCursorsFind <C-R>"<CR>
