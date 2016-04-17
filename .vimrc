@@ -1,4 +1,6 @@
 scriptencoding utf-8
+filetype off
+filetype plugin indent off
 set encoding=utf-8
 colorscheme desert
 set title
@@ -38,8 +40,8 @@ set statusline+=\ [%{&fileformat}]
 set statusline+=[%{has('multi_byte')&&\&fileencoding!=''?&fileencoding:&encoding}]
 "ファイルタイプ表示
 set statusline+=%y
-set statusline+=%=\ %l/%L\ 
-set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [line=%04l,%04v][%p%%]%=\[FORMAT=%{&ff}]\[ENC=%{&fileencoding}]\[ROW=%l/%L] 
+set statusline+=%=\ %l/%L\
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [line=%04l,%04v][%p%%]%=\[FORMAT=%{&ff}]\[ENC=%{&fileencoding}]\[ROW=%l/%L]
 " -------------------------------------------------------------
 set showcmd
 set showmatch
@@ -133,7 +135,7 @@ call dein#add('tyru/open-browser.vim')
 call dein#add('terryma/vim-multiple-cursors')
 call dein#add('kovisoft/slimv.git')
 call dein#end()
-" ------------------------------------- 
+" -------------------------------------
 " Unite settings
 let g:unite_enable_start_insert=1
 au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
@@ -157,13 +159,16 @@ if executable('pt')
   let g:unite_source_grep_default_opts = '--nogroup --nocolor'
   let g:unite_source_grep_recursive_opt = ''
 endif
-" ------------------------------------- 
+" -------------------------------------
 let g:airline_powerline_fonts = 1
 let g:syntastic_javascript_checkers=['eslint']
 let g:syntastic_python_checkers = ['flake8']
-let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp\""'
+" for slimv
+let lisp_rainbow=1
+let g:slimv_swank_cmd='!osascript -e "tell application \"iTerm\"" -e "tell the first terminal" -e "set mysession to current session" -e "launch session \"Default Session\"" -e "tell the last session" -e "exec command \"/bin/bash\"" -e "write text \"sbcl --load ~/.vim/dein/repos/github.com/kovisoft/slimv/slime/start-swank.lisp\"" -e "end tell" -e "select mysession" -e "end tell" -e "end tell"'
 " 検索系
 let g:netrw_nogx = 1
 
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
+filetype detect
