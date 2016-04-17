@@ -103,8 +103,10 @@ function vcs_prompt_info() {
 }
 # end VCS
 
-OK="^_^ "
-NG=">_< "
+#OK="^_^ "
+#NG=">_< "
+OK=$'\U1F60C '
+NG=$'\U1F525 '
 
 PROMPT=""
 PROMPT+="%(?.%F{green}$OK%f.%F{red}$NG%f) "
@@ -208,4 +210,16 @@ function peco-select-history() {
     zle clear-screen
 }
 zle -N peco-select-history
-bindkey '^r' peco-history-selection
+bindkey '^r' peco-select-history
+
+zplug "b4b4r07/enhancd", of:enhancd.sh
+zplug "stedolan/jq", from:gh-r, as:command \
+    | zplug "b4b4r07/emoji-cli", if:"which jq"
+
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+zplug load --verbose

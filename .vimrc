@@ -39,7 +39,7 @@ set statusline+=[%{has('multi_byte')&&\&fileencoding!=''?&fileencoding:&encoding
 "ファイルタイプ表示
 set statusline+=%y
 set statusline+=%=\ %l/%L\ 
-"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [line=%04l,%04v][%p%%]%=\[FORMAT=%{&ff}]\[ENC=%{&fileencoding}]\[ROW=%l/%L] 
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [line=%04l,%04v][%p%%]%=\[FORMAT=%{&ff}]\[ENC=%{&fileencoding}]\[ROW=%l/%L] 
 " -------------------------------------------------------------
 set showcmd
 set showmatch
@@ -60,6 +60,8 @@ nnoremap <Leader>x :q!<CR>
 nnoremap <Leader>o :Unite -buffer-name=file file<CR>
 
 " Key Map
+" jjでエスケープ
+inoremap <silent> jj <ESC>
 inoremap {<Enter> {}<Left><CR><ESC><S-o>
 inoremap [<Enter> []<Left><CR><ESC><S-o>
 inoremap (<Enter> ()<Left><CR><ESC><S-o>
@@ -116,9 +118,12 @@ set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
 call dein#begin(expand('~/.vim/dein'))
 "call dein#add({path to dein.vim directory})
 call dein#add('Shougo/dein.vim')
+call dein#add('vim-airline/vim-airline-themes')
+call dein#add('vim-airline/vim-airline')
 call dein#add('Shougo/vimproc.vim')
 call dein#add('Shougo/neocomplete.vim')
 call dein#add('Shougo/neomru.vim')
+call dein#add('editorconfig/editorconfig-vim')
 "call dein#add('Shougo/neosnippet.vim')
 call dein#add('Shougo/unite.vim')
 call dein#add('Shougo/vimfiler')
@@ -131,16 +136,29 @@ call dein#end()
 " ------------------------------------- 
 " Unite settings
 let g:unite_enable_start_insert=1
-" MRU
-nnoremap <C-Z> :Unite file_mru<CR>
 au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
 au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
-let g:unite_source_file_mru_limit = 200
-nnoremap <silent> ,ub :<C-u>Unite buffer<CR>
-nnoremap <silent> ,uf :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-nnoremap <silent> ,ur :<C-u>Unite -buffer-name=register register<CR>
-nnoremap <silent> ,uu :<C-u>Unite file_mru buffer<CR>
+au FileType unite nnoremap <silent> <buffer> <C-g> :q<CR>
+au FileType unite inoremap <silent> <buffer> <C-g> <ESC>:q<CR>
+let g:unite_source_file_mru_limit = 300
+" バッファから検索
+nnoremap <silent> <Leader>ub :<C-u>Unite buffer<CR>
+" ディレクトリ以下のファイル名を検索
+nnoremap <silent> <Leader>uf :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+" レジスタを検索
+nnoremap <silent> <Leader>ur :<C-u>Unite -buffer-name=register register<CR>
+" 最近開いたファイルを検索
+nnoremap <silent> <Leader>um :<C-u>Unite file_mru buffer<CR>
+" 現在カーソルの単語をgrepを検索
+nnoremap <silent> <Leader>ug :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
+"nnoremap <silent> ,g :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
+if executable('pt')
+  let g:unite_source_grep_command = 'pt'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor'
+  let g:unite_source_grep_recursive_opt = ''
+endif
 " ------------------------------------- 
+let g:airline_powerline_fonts = 1
 let g:syntastic_javascript_checkers=['eslint']
 let g:syntastic_python_checkers = ['flake8']
 let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp\""'
@@ -149,10 +167,3 @@ let g:netrw_nogx = 1
 
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
-
-nnoremap <silent> ,g :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
-if executable('pt')
-  let g:unite_source_grep_command = 'pt'
-  let g:unite_source_grep_default_opts = '--nogroup --nocolor'
-  let g:unite_source_grep_recursive_opt = ''
-endif
