@@ -51,9 +51,6 @@ set wildmenu wildmode=list:full
 set nospell
 set cursorline
 
-" for memo
-source ~/.vim/dailymemo.vim
-
 let mapleader = "\<Space>"
 " save file
 nnoremap <Leader>w :w<CR>
@@ -134,6 +131,7 @@ call dein#add('editorconfig/editorconfig-vim')
 call dein#add('tyru/open-browser.vim')
 call dein#add('terryma/vim-multiple-cursors')
 call dein#add('kovisoft/slimv.git')
+call dein#add('digitaltoad/vim-pug.git')
 call dein#end()
 " -------------------------------------
 " Unite settings
@@ -168,6 +166,7 @@ let lisp_rainbow=1
 let g:slimv_swank_cmd='!osascript -e "tell application \"iTerm\"" -e "tell the first terminal" -e "set mysession to current session" -e "launch session \"Default Session\"" -e "tell the last session" -e "exec command \"/bin/bash\"" -e "write text \"sbcl --load ~/.vim/dein/repos/github.com/kovisoft/slimv/slime/start-swank.lisp\"" -e "end tell" -e "select mysession" -e "end tell" -e "end tell"'
 " 検索系
 let g:netrw_nogx = 1
+au BufRead,BufNewFile,BufReadPre *.jade   set filetype=pug
 
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
