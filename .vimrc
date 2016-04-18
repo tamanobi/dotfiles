@@ -6,6 +6,7 @@ colorscheme desert
 set title
 syntax on
 set number
+set hidden
 set tabstop=2
 set shiftwidth=2
 set scrolloff=1000
@@ -58,8 +59,10 @@ let mapleader = "\<Space>"
 " save file
 nnoremap <Leader>w :w<CR>
 " quit edit
-nnoremap <Leader>x :q!<CR>
-nnoremap <Leader>o :Unite -buffer-name=file file<CR>
+nnoremap <Leader>q :q!<CR>
+nnoremap <Leader>o :<C-u>Unite grep:. -buffer-name=file file<CR>
+nnoremap <Leader>c :<C-u>Unite grep -buffer-name=file file<CR>
+nnoremap <Leader>b :<C-u>Unite buffer<CR>
 
 " Key Map
 " jjでエスケープ
@@ -119,6 +122,7 @@ set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
 
 call dein#begin(expand('~/.vim/dein'))
 "call dein#add({path to dein.vim directory})
+"call dein#add('Shougo/neosnippet.vim')
 call dein#add('Shougo/dein.vim')
 call dein#add('vim-airline/vim-airline-themes')
 call dein#add('vim-airline/vim-airline')
@@ -126,7 +130,6 @@ call dein#add('Shougo/vimproc.vim')
 call dein#add('Shougo/neocomplete.vim')
 call dein#add('Shougo/neomru.vim')
 call dein#add('editorconfig/editorconfig-vim')
-"call dein#add('Shougo/neosnippet.vim')
 call dein#add('Shougo/unite.vim')
 call dein#add('Shougo/vimfiler')
 call dein#add('scrooloose/syntastic')
