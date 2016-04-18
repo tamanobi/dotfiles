@@ -59,10 +59,17 @@ let mapleader = "\<Space>"
 " save file
 nnoremap <Leader>w :w<CR>
 " quit edit
-nnoremap <Leader>q :q!<CR>
-nnoremap <Leader>o :<C-u>Unite grep:. -buffer-name=file file<CR>
-nnoremap <Leader>c :<C-u>Unite grep -buffer-name=file file<CR>
-nnoremap <Leader>b :<C-u>Unite buffer<CR>
+nnoremap <silent> <Leader>q :q!<CR>
+" Unite
+nnoremap <silent> <Leader>o :<C-u>Unite -no-empty file_rec<CR>
+nnoremap <silent> <Leader>m :<C-u>Unite -no-empty file_mru buffer<CR>
+nnoremap <silent> <Leader>l :<C-u>UniteWithCursorWord -no-empty line<CR>
+nnoremap <silent> <Leader>b :<C-u>Unite -no-empty buffer<CR>
+nnoremap <silent> <Leader>c :<C-u>Unite -no-empty change<CR>
+nnoremap <silent> <Leader>k :<C-u>UniteWithCursorWord -no-empty file_rec file_mru buffer<CR>
+nnoremap <silent> <Leader>i :<C-u>Unite -no-empty grep:.:.:file_rec line -buffer-name=files<CR>
+" suspend(fgで復帰する)
+nnoremap <silent> <Leader>, <C-z>
 
 " Key Map
 " jjでエスケープ
