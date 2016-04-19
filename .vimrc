@@ -58,7 +58,7 @@ nnoremap <Leader>w :w<CR>
 " quit edit
 nnoremap <silent> <Leader>q :q!<CR>
 " Unite
-nnoremap <silent> <Leader>o :<C-u>Unite -no-empty file_rec<CR>
+nnoremap <silent> <Leader>o :<C-u>Unite file_rec<CR>
 nnoremap <silent> <Leader>m :<C-u>Unite -no-empty file_mru buffer<CR>
 nnoremap <silent> <Leader>l :<C-u>UniteWithCursorWord -no-empty line<CR>
 nnoremap <silent> <Leader>b :<C-u>Unite -no-empty buffer<CR>

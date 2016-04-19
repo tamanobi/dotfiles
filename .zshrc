@@ -177,7 +177,7 @@ function pv(){
   file=$(pt $@ | peco | awk -F: '{printf  $1 " -c" $2}'| sed -e 's/\-c$//')
   if [ -n ${#file} ]; then
     eval 'vim ${=file}'
-  fi  
+  fi
 }
 
 function peco-dir-open-app () {
@@ -185,7 +185,7 @@ function peco-dir-open-app () {
     zle clear-screen
 }
 zle -N peco-dir-open-app
-bindkey '^xt' peco-dir-open-app     # C-x t
+bindkey '^xo' peco-dir-open-app     # C-x t
 
 # git directory
 function peco-git-dir-open-app () {
