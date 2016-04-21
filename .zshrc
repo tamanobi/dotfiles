@@ -158,14 +158,13 @@ function cdup() {
 zle -N cdup
 #bindkey '^K' cdup
 
-#bindkey "^R" history-incremental-search-backward
 
 # -------------------------------------
 # その他
 # -------------------------------------
 
 # cdしたあとで、自動的に ls する
-function chpwd() { ls -1 }
+function chpwd() { ls -l }
 
 # iTerm2のタブ名を変更する
 function title {
@@ -210,7 +209,7 @@ function peco-select-history() {
     zle clear-screen
 }
 zle -N peco-select-history
-bindkey '^r' peco-select-history
+bindkey '^R' peco-select-history
 
 zplug "b4b4r07/enhancd", of:enhancd.sh
 zplug "stedolan/jq", from:gh-r, as:command \

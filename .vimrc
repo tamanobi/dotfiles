@@ -59,9 +59,9 @@ nnoremap <Leader>w :w<CR>
 nnoremap <silent> <Leader>q :q!<CR>
 " Unite
 nnoremap <silent> <Leader>o :<C-u>Unite file_rec<CR>
-nnoremap <silent> <Leader>m :<C-u>Unite -no-empty file_mru buffer<CR>
+nnoremap <silent> <Leader>m :<C-u>Unite -no-empty file_mru buffer tab<CR>
 nnoremap <silent> <Leader>l :<C-u>UniteWithCursorWord -no-empty line<CR>
-nnoremap <silent> <Leader>b :<C-u>Unite -no-empty buffer<CR>
+nnoremap <silent> <Leader>b :<C-u>Unite -no-empty buffer tab<CR>
 nnoremap <silent> <Leader>c :<C-u>Unite -no-empty change<CR>
 nnoremap <silent> <Leader>k :<C-u>UniteWithCursorWord -no-empty file_rec file_mru buffer<CR>
 nnoremap <silent> <Leader>i :<C-u>Unite -no-empty grep:.:.:file_rec line -buffer-name=files<CR>
@@ -101,7 +101,10 @@ nnoremap <C-L> $
 inoremap <C-H> <BS>
 inoremap <C-L> <ESC>
 " magic
-nnoremap / /\v
+" nnoremap / /\v
+
+nnoremap <silent><C-e> :NERDTreeToggle<CR>
+
 " cursor
 nnoremap j gj
 nnoremap k gk
@@ -128,6 +131,7 @@ call dein#begin(expand('~/.vim/dein'))
 "call dein#add({path to dein.vim directory})
 "call dein#add('Shougo/neosnippet.vim')
 call dein#add('Shougo/dein.vim')
+call dein#add('scrooloose/nerdtree')
 call dein#add('vim-airline/vim-airline-themes')
 call dein#add('vim-airline/vim-airline')
 call dein#add('Shougo/vimproc.vim')
@@ -142,6 +146,10 @@ call dein#add('tyru/open-browser.vim')
 call dein#add('terryma/vim-multiple-cursors')
 call dein#add('kovisoft/slimv.git')
 call dein#add('digitaltoad/vim-pug.git')
+if has('nvim')
+  call dein#add('Shougo/deoplete.nvim')
+  let g:deoplete#enable_at_startup = 1
+endif
 call dein#end()
 " -------------------------------------
 " Unite settings
@@ -166,17 +174,28 @@ if executable('pt')
   let g:unite_source_grep_command = 'pt'
   let g:unite_source_grep_default_opts = '--nogroup --nocolor'
   let g:unite_source_grep_recursive_opt = ''
+  let g:unite_source_grep_max_candidates = 300
 endif
 " -------------------------------------
 let g:airline_powerline_fonts = 1
 let g:syntastic_javascript_checkers=['eslint']
 let g:syntastic_python_checkers = ['flake8']
 " for slimv
-let lisp_rainbow=1
-let g:slimv_swank_cmd='!osascript -e "tell application \"iTerm\"" -e "tell the first terminal" -e "set mysession to current session" -e "launch session \"Default Session\"" -e "tell the last session" -e "exec command \"/bin/bash\"" -e "write text \"sbcl --load ~/.vim/dein/repos/github.com/kovisoft/slimv/slime/start-swank.lisp\"" -e "end tell" -e "select mysession" -e "end tell" -e "end tell"'
+let g:lisp_rainbow = 1
+let g:slimv_lisp = 'ros run'
+let g:slimv_impl = 'sbcl'
+" let g:slimv_swank_cmd='!osascript -e "tell application \"iTerm\"" -e "tell the first terminal" -e "set mysession to current session" -e "launch session \"Default Session\"" -e "tell the last session" -e "exec command \"/bin/bash\"" -e "write text \"sbcl --load ~/.vim/dein/repos/github.com/kovisoft/slimv/slime/start-swank.lisp\"" -e "end tell" -e "select mysession" -e "end tell" -e "end tell"'
 " 検索系
 let g:netrw_nogx = 1
 au BufRead,BufNewFile,BufReadPre *.jade   set filetype=pug
+
+if dein#check_install(['vimproc'])
+  call dein#install(['vimproc'])
+endif
+" その他インストールしていないものはこちらに入れる
+if dein#check_install()
+  call dein#install()
+endif
 
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
