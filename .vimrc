@@ -2,6 +2,7 @@ scriptencoding utf-8
 filetype off
 filetype plugin indent off
 set encoding=utf-8
+inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
 colorscheme desert
 set title
 syntax on
