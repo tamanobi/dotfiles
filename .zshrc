@@ -180,7 +180,7 @@ function pv(){
 }
 
 function peco-dir-open-app () {
-    find . | peco | xargs sh -c 'vim "$0" < /dev/tty'
+    find . | peco -b 100 | xargs sh -c 'vim "$0" < /dev/tty'
     zle clear-screen
 }
 zle -N peco-dir-open-app
