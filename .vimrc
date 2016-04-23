@@ -1,11 +1,11 @@
 scriptencoding utf-8
+set encoding=utf-8
 filetype off
 filetype plugin indent off
-set encoding=utf-8
 inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
 colorscheme desert
+set history=1000
 set title
-syntax on
 set number
 set hidden
 set tabstop=2
@@ -26,6 +26,9 @@ hi CursorLineNr term=bold   cterm=BOLD ctermfg=228 ctermbg=8
 set list
 set listchars=tab:>-,extends:<,trail:-
 set laststatus=2
+if has('gui') || has('xterm_clipboard')
+  set clipboard=unnamed
+endif
 " -------------------------------------------------------------
 " STATUS LINE
 "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
@@ -54,9 +57,9 @@ set nospell
 set cursorline
 
 let mapleader = "\<Space>"
-" save file
+" comand shortcut
 nnoremap <Leader>w :w<CR>
-" quit edit
+nnoremap <Leader>e :e<space>%:h<CR>
 nnoremap <silent> <Leader>q :q!<CR>
 " Unite
 nnoremap <silent> <Leader>o :<C-u>Unite file_rec<CR>
@@ -69,20 +72,22 @@ nnoremap <silent> <Leader>i :<C-u>Unite -no-empty grep:.:.:file_rec line -buffer
 " suspend(fgで復帰する)
 nnoremap <silent> <Leader>, <C-z>
 
+" 強制書き込みコマンド
+cabbr w!! w !sudo tee > /dev/null %
+
 " Key Map
-" jjでエスケープ
-inoremap <silent> jj <ESC>
 inoremap {<Enter> {}<Left><CR><ESC><S-o>
 inoremap [<Enter> []<Left><CR><ESC><S-o>
 inoremap (<Enter> ()<Left><CR><ESC><S-o>
 vnoremap { "zdi^V{<C-R>z}<ESC>
 vnoremap [ "zdi^V[<C-R>z]<ESC>
-vnoremap ( "zdi^V(<C-R>z)<ESC>
-vnoremap " "zdi^V"<C-R>z^V"<ESC>
 vnoremap ' "zdi'<C-R>z'<ESC>
 " Buffer
 nnoremap <C-n> :bp<CR>
 nnoremap <C-p> :bn<CR>
+" Tabpage
+nnoremap <C-k> :<C-u>tabp<CR>
+nnoremap <C-j> :<C-u>tabn<CR>
 " You must prepare Directory(ex. mkdir -p ~/.vim/undo)
 if has('persistent_undo')
   set undodir=~/.vim/undo
@@ -92,16 +97,26 @@ endif
 " @see also: https://wiki.archlinuxjp.org/index.php/Vim#Vim_.E3.81.AB.E3.83.95.E3.82.A1.E3.82.A4.E3.83.AB.E3.81.AE.E3.82.AB.E3.83.BC.E3.82.BD.E3.83.AB.E4.BD.8D.E7.BD.AE.E3.82.92.E8.A8.98.E6.86.B6.E3.81.95.E3.81.9B.E3.82.8B
 " @see also: http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\""
+" カスタマイズ
 noremap! <C-A> <Home>
 noremap! <C-E> <End>
 noremap! <C-F> <Right>
 noremap! <C-B> <Left>
-" 移動
 nnoremap <C-H> ^
 nnoremap <C-L> $
+" jjでエスケープ
+inoremap <silent> jj <ESC>
+inoremap <C-H> <C-O>^
+inoremap <C-L> <C-O>$
+" ターミナルの操作と統一
+inoremap <C-W> <C-O>b<C-O>cw
+inoremap <C-U> <C-O>^<C-O>d$
 inoremap <C-H> <BS>
-inoremap <C-L> <ESC>
+" 割当
 nnoremap ; :
+inoremap <C-J> <ESC>
+nnoremap <C-L> <ESC>
+vnoremap <C-L> <ESC>
 " magic
 " nnoremap / /\v
 
@@ -112,7 +127,6 @@ nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
-inoremap <C-w> <ESC>bcw
 " ブラウザを開く
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
@@ -155,7 +169,7 @@ endif
 call dein#end()
 " -------------------------------------
 " Unite settings
-let g:unite_enable_start_insert=1
+let g:unite_enable_start_insert=0
 au FileType unite nnoremap <silent> <buffer> <C-g> :q<CR>
 au FileType unite inoremap <silent> <buffer> <C-g> <ESC>:q<CR>
 let g:unite_source_file_mru_limit = 300
@@ -200,3 +214,4 @@ endif
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
 filetype detect
+syntax on
