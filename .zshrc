@@ -176,7 +176,7 @@ function title {
 function ptvim(){
   local file
   file=$(pt $@ | peco | awk -F: '{printf  $1 " -c" $2}'| sed -e 's/\-c$//')
-  if [ -n ${#file} ]; then
+  if [ ${#file} -gt 0 ]; then
     eval 'vim ${=file}'
   fi
 }
