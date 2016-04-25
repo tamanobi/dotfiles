@@ -173,7 +173,7 @@ function title {
     echo -ne "\033]0;"$*"\007"
 }
 
-function pv(){
+function ptvim(){
   local file
   file=$(pt $@ | peco | awk -F: '{printf  $1 " -c" $2}'| sed -e 's/\-c$//')
   if [ -n ${#file} ]; then
