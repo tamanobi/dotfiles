@@ -509,12 +509,12 @@
 	<true/>
 	<key>MaxVertically</key>
 	<false/>
-	<key>NSFontPanelAttributes</key>
-	<string>1, 0</string>
 	<key>NSNavLastRootDirectory</key>
 	<string>~/dotfiles/iterm2/settings</string>
 	<key>NSNavPanelExpandedSizeForOpenMode</key>
-	<string>{712, 459}</string>
+	<string>{889, 448}</string>
+	<key>NSNavPanelMediaBrowserTypeForOpenModeKey</key>
+	<integer>1</integer>
 	<key>NSQuotedKeystrokeBinding</key>
 	<string></string>
 	<key>NSRepeatCountBinding</key>
@@ -538,16 +538,25 @@
 	<array/>
 	<key>NSTableView Sort Ordering KeyBingingTable</key>
 	<array/>
+	<key>NSToolbar Configuration Terminal Toolbar</key>
+	<dict>
+		<key>TB Display Mode</key>
+		<integer>1</integer>
+		<key>TB Icon Size Mode</key>
+		<integer>1</integer>
+		<key>TB Is Shown</key>
+		<integer>0</integer>
+		<key>TB Size Mode</key>
+		<integer>1</integer>
+	</dict>
 	<key>NSWindow Frame NSFontPanel</key>
-	<string>491 227 686 314 0 0 1280 777 </string>
+	<string>787 453 445 103 0 0 1280 777 </string>
 	<key>NSWindow Frame Preferences</key>
-	<string>119 292 924 485 0 0 1280 777 </string>
+	<string>356 292 924 485 0 0 1280 777 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>557 313 490 351 0 0 1280 777 </string>
+	<string>0 68 1280 429 0 0 1280 777 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>643 300 490 351 0 0 1280 777 </string>
-	<key>NSWindow Frame iTerm Window 2</key>
-	<string>357 153 892 624 0 0 1280 777 </string>
+	<string>675 283 612 485 0 0 1280 777 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -768,7 +777,7 @@
 			<key>Custom Command</key>
 			<string>No</string>
 			<key>Custom Directory</key>
-			<string>Recycle</string>
+			<string>No</string>
 			<key>Default Bookmark</key>
 			<string>No</string>
 			<key>Disable Printing</key>
@@ -862,6 +871,13 @@
 					<integer>11</integer>
 					<key>Text</key>
 					<string>0x7f</string>
+				</dict>
+				<key>0x62-0x80000</key>
+				<dict>
+					<key>Action</key>
+					<integer>10</integer>
+					<key>Text</key>
+					<string>b</string>
 				</dict>
 				<key>0xf700-0x220000</key>
 				<dict>
@@ -1103,11 +1119,11 @@
 			<key>Normal Font</key>
 			<string>RictyForPowerline-Regular 18</string>
 			<key>Option Key Sends</key>
-			<integer>0</integer>
+			<integer>2</integer>
 			<key>Prompt Before Closing 2</key>
 			<integer>0</integer>
 			<key>Right Option Key Sends</key>
-			<integer>0</integer>
+			<integer>2</integer>
 			<key>Rows</key>
 			<integer>25</integer>
 			<key>Screen</key>
@@ -1253,7 +1269,7 @@
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
 			<key>Transparency</key>
-			<real>0.17524038255214691</real>
+			<real>0.11643167585134506</real>
 			<key>Triggers</key>
 			<array/>
 			<key>Unlimited Scrollback</key>
@@ -1271,7 +1287,7 @@
 			<key>Visual Bell</key>
 			<true/>
 			<key>Window Type</key>
-			<integer>5</integer>
+			<integer>0</integer>
 			<key>Working Directory</key>
 			<string>/Users/Kohki</string>
 		</dict>
@@ -2002,9 +2018,9 @@
 		</dict>
 	</array>
 	<key>NoSyncTimeOfLastPromo</key>
-	<real>482202811.15529603</real>
+	<real>482172244.456976</real>
 	<key>NoSyncTimeOfLastPromoDownload</key>
-	<real>482626947.95128202</real>
+	<real>482770918.83821201</real>
 	<key>OnlyWhenMoreTabs</key>
 	<true/>
 	<key>OpenArrangementAtStartup</key>
@@ -2051,7 +2067,7 @@
 		</dict>
 	</dict>
 	<key>PrefsCustomFolder</key>
-	<string>/Users/yasu/dotfiles/iterm2/settings</string>
+	<string>/Users/Kohki/dotfiles/iterm2/settings</string>
 	<key>PromptOnQuit</key>
 	<true/>
 	<key>QuitWhenAllWindowsClosed</key>
@@ -2067,7 +2083,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-04-17T23:02:08Z</date>
+	<date>2016-04-23T05:14:37Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>

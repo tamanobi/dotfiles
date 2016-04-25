@@ -124,6 +124,8 @@ RPROMPT="[%*]"
 
 # -n 行数表示, -I バイナリファイル無視, svn関係のファイルを無視
 alias grep="grep --color -n -I --exclude='*.svn-*' --exclude='entries' --exclude='*/cache/*'"
+alias e="emacs"
+alias v="vim"
 
 # ls
 alias ls="ls -G" # color for darwin
@@ -137,13 +139,13 @@ alias tree="tree -NC" # N: 文字化け対策, C:色をつける
 # git alias
 alias gg="git grep"
 alias g="git"
-alias v="vim"
 alias gs="git status"
 alias gco="git checkout"
 alias gcm="git commit"
 alias glg="git log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s"
 alias gb="git for-each-ref --sort='-*committerdate' --format='%(refname:short)' refs/heads/"
 alias -g B='`gb | peco | sed -e "s/^\* //g" | awk "{print $1}"`'
+alias pd="popd"
 # -------------------------------------
 # キーバインド
 # -------------------------------------
@@ -164,7 +166,7 @@ zle -N cdup
 # -------------------------------------
 
 # cdしたあとで、自動的に ls する
-function chpwd() { ls -l }
+function chpwd() { ls }
 
 # iTerm2のタブ名を変更する
 function title {
