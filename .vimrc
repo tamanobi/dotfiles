@@ -24,15 +24,23 @@ set incsearch
 set mouse=a
 hi CursorLineNr term=bold   cterm=BOLD ctermfg=228 ctermbg=8
 set list
+" 入力中のコマンドを表示する
+set showcmd
+" 対応する括弧を表示
+set showmatch
+set matchtime=1
+set display=lastline
+set wildmenu wildmode=list:full
+set nospell
+set cursorline
 set listchars=tab:>-,extends:<,trail:-
-set laststatus=2
 if has('gui') || has('xterm_clipboard')
   set clipboard=unnamed
 endif
 " -------------------------------------------------------------
 " STATUS LINE
-"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
-" set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+" -------------------------------------------------------------
+set laststatus=2
 " file number
 set statusline=[%n]
 "ホスト名表示
@@ -48,20 +56,17 @@ set statusline+=%y
 set statusline+=%=\ %l/%L\
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [line=%04l,%04v][%p%%]%=\[FORMAT=%{&ff}]\[ENC=%{&fileencoding}]\[ROW=%l/%L]
 " -------------------------------------------------------------
-set showcmd
-set showmatch
-set matchtime=1
-set display=lastline
-set wildmenu wildmode=list:full
-set nospell
-set cursorline
 
-let mapleader = "\<Space>"
+" -------------------------------------------------------------
 " comand shortcut
+" -------------------------------------------------------------
+let mapleader = "\<Space>"
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>e :e<space>%:h<CR>
 nnoremap <silent> <Leader>q :q!<CR>
+" -------------------------------------------------------------
 " Unite
+" -------------------------------------------------------------
 nnoremap <silent> <Leader>o :<C-u>Unite file_rec<CR>
 nnoremap <silent> <Leader>m :<C-u>Unite -no-empty file_mru buffer tab<CR>
 nnoremap <silent> <Leader>l :<C-u>UniteWithCursorWord -no-empty line<CR>
@@ -69,6 +74,7 @@ nnoremap <silent> <Leader>b :<C-u>Unite -no-empty buffer tab<CR>
 nnoremap <silent> <Leader>c :<C-u>Unite -no-empty change<CR>
 nnoremap <silent> <Leader>k :<C-u>UniteWithCursorWord -no-empty file_rec file_mru buffer<CR>
 nnoremap <silent> <Leader>i :<C-u>Unite -no-empty grep:.:.:file_rec line -buffer-name=files<CR>
+" -------------------------------------------------------------
 " suspend(fgで復帰する)
 nnoremap <silent> <Leader>, <C-z>
 
