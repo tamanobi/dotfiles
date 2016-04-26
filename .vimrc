@@ -63,17 +63,17 @@ set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [line=%04l,%04v][%p%%]%=\
 let mapleader = "\<Space>"
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>e :e<space>%:h<CR>
-nnoremap <silent> <Leader>q :q!<CR>
+nnoremap <Leader>q :q!<CR>
 " -------------------------------------------------------------
 " Unite
 " -------------------------------------------------------------
-nnoremap <silent> <Leader>o :<C-u>Unite file_rec<CR>
+nnoremap <silent> <Leader>o :<C-u>Unite file file_rec<CR>
 nnoremap <silent> <Leader>m :<C-u>Unite -no-empty file_mru buffer tab<CR>
 nnoremap <silent> <Leader>l :<C-u>UniteWithCursorWord -no-empty line<CR>
 nnoremap <silent> <Leader>b :<C-u>Unite -no-empty buffer tab<CR>
-nnoremap <silent> <Leader>c :<C-u>Unite -no-empty change<CR>
 nnoremap <silent> <Leader>k :<C-u>UniteWithCursorWord -no-empty file_rec file_mru buffer<CR>
 nnoremap <silent> <Leader>i :<C-u>Unite -no-empty grep:.:.:file_rec line -buffer-name=files<CR>
+nnoremap <silent> <Leader>c :<C-u>Unite -no-empty change<CR>
 " -------------------------------------------------------------
 " suspend(fgで復帰する)
 nnoremap <silent> <Leader>, <C-z>
