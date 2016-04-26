@@ -136,7 +136,6 @@ nnoremap gk k
 " ブラウザを開く
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
-vnoremap <C-n> y:MultipleCursorsFind <C-R>"<CR>
 " Plugin
 if has('vim_starting')
    " 初回起動時のみruntimepathにneobundleのパスを指定する
@@ -165,7 +164,6 @@ call dein#add('Shougo/vimfiler')
 call dein#add('scrooloose/syntastic')
 call dein#add('editorconfig/editorconfig-vim')
 call dein#add('tyru/open-browser.vim')
-call dein#add('terryma/vim-multiple-cursors')
 call dein#add('kovisoft/slimv.git')
 call dein#add('digitaltoad/vim-pug.git')
 if has('nvim')
@@ -175,6 +173,7 @@ endif
 call dein#end()
 " -------------------------------------
 " Unite settings
+" -------------------------------------
 let g:unite_enable_start_insert=0
 au FileType unite nnoremap <silent> <buffer> <C-g> :q<CR>
 au FileType unite inoremap <silent> <buffer> <C-g> <ESC>:q<CR>
