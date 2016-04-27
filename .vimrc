@@ -166,6 +166,7 @@ call dein#add('editorconfig/editorconfig-vim')
 call dein#add('tyru/open-browser.vim')
 call dein#add('kovisoft/slimv.git')
 call dein#add('digitaltoad/vim-pug.git')
+call dein#add('thinca/vim-quickrun')
 if has('nvim')
   call dein#add('Shougo/deoplete.nvim')
   let g:deoplete#enable_at_startup = 1
