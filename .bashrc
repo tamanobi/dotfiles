@@ -6,24 +6,28 @@ alias gdf="g diff"
 alias gbr="g branch"
 alias glg="g log --graph --oneline --color"
 
-if [ -e ~/git-completion.bash]; then
+if [ -e ~/git-completion.bash ]; then
   source ~/git-completion.bash
 else
   if type wget > /dev/null 2>&1; then
     wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -O ~/git-completion.bash
+    source ~/git-completion.bash
   elif type curl > /dev/null 2>&1; then
     curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/git-completion.bash
+    source ~/git-completion.bash
   else
     echo "cannot download" 1>&2
   fi
 fi
-if [ -e ~/git-prompt.sh]; then
-  source ~/git-prompt.bash
+if [ -e ~/git-prompt.sh ]; then
+  source ~/git-prompt.sh
 else
   if type wget > /dev/null 2>&1; then
     wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/git-prompt.sh
+    source ~/git-prompt.sh
   elif type curl > /dev/null 2>&1; then
     curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/git-prompt.sh
+    source ~/git-prompt.sh
   else
     echo "cannot download" 1>&2
   fi
