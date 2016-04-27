@@ -6,6 +6,12 @@ alias gdf="g diff"
 alias gg="g grep"
 alias gbr="g branch"
 alias glg="g log --graph --oneline --color"
+# dstat
+alias dstat-full='dstat -Tclmdrn'
+alias dstat-mem='dstat -Tclm'
+alias dstat-cpu='dstat -Tclr'
+alias dstat-net='dstat -Tclnd'
+alias dstat-disk='dstat -Tcldr'
 
 if [ -e ~/git-completion.bash ]; then
   source ~/git-completion.bash
