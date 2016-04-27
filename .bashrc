@@ -3,6 +3,7 @@ alias g='git'
 alias gco="g checkout"
 alias gst="g status"
 alias gdf="g diff"
+alias gg="g grep"
 alias gbr="g branch"
 alias glg="g log --graph --oneline --color"
 
