@@ -146,7 +146,7 @@ if &compatible
    set nocompatible
 endif
 set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
-let s:cache_home = '~/.vim'
+let s:cache_home = expand('~/.vim')
 let s:dein_dir = s:cache_home . '/dein'
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 if !isdirectory(s:dein_repo_dir)
