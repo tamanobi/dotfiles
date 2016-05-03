@@ -267,7 +267,7 @@ augroup highlight-cursor-word
   "autocmd ColorScheme * highlight CursorWord cbg=Red
   "hi CursorWord term=bold cterm=bold ctermfg=yellow ctermbg=Red
   "hi CursorWord term=bold cterm=bold ctermfg=red ctermbg=yellow
-  hi CursorWord term=bold cterm=bold
+  hi CursorWord term=bold,underline cterm=bold,underline ctermfg=black ctermbg=white
   autocmd BufLeave * call s:hl_clear()
   autocmd WinLeave * call s:hl_clear()
   autocmd InsertEnter * call s:hl_clear()
