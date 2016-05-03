@@ -3,7 +3,8 @@ set encoding=utf-8
 filetype off
 filetype plugin indent off
 inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
-colorscheme desert
+inoremap <C-J> <ESC>
+inoremap {{ <ESC>
 set history=1000
 set title
 set number
@@ -21,8 +22,10 @@ set autoindent
 set smartindent
 set hlsearch
 set incsearch
-set mouse=a
-hi CursorLineNr term=bold   cterm=BOLD ctermfg=228 ctermbg=8
+if has('mouse')
+  set mouse=a
+endif
+hi CursorLineNr term=bold cterm=bold ctermfg=228 ctermbg=8
 set list
 " 入力中のコマンドを表示する
 set showcmd
@@ -136,7 +139,7 @@ nnoremap gk k
 " ブラウザを開く
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
-" Plugin
+" Plug in
 if has('vim_starting')
    " 初回起動時のみruntimepathにneobundleのパスを指定する
    set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -220,3 +223,58 @@ endif
 filetype plugin indent on
 filetype detect
 syntax on
+colorscheme desert
+
+" -------------------------------------
+" Cursor Word Highlight
+" -------------------------------------
+let g:enable_highlight_cursor_word = 1
+augroup highlight-cursor-word
+  autocmd!
+  autocmd CursorMoved * call s:hl_cword()
+  " カーソル移動が重くなったと感じるようであれば
+  " CursorMoved ではなくて
+  " CursorHold を使用する
+  "     autocmd CursorHold * call s:hl_cword()
+  " 単語のハイライト設定
+  "autocmd ColorScheme * highlight CursorWord cbg=Red
+  "hi CursorWord term=bold cterm=bold ctermfg=yellow ctermbg=Red
+  "hi CursorWord term=bold cterm=bold ctermfg=red ctermbg=yellow
+  hi CursorWord term=bold cterm=bold
+  autocmd BufLeave * call s:hl_clear()
+  autocmd WinLeave * call s:hl_clear()
+  autocmd InsertEnter * call s:hl_clear()
+augroup END
+
+function! s:hl_clear()
+  "if exists("b:highlight_cursor_word_id") && exists("b:highlight_cursor_word")
+  "  silent! call matchdelete(b:highlight_cursor_word_id)
+  "  unlet b:highlight_cursor_word_id
+  "  unlet b:highlight_cursor_word
+  "endif
+  if exists("b:highlight_cursor_word_id") && exists("b:highlight_cursor_word")
+    silent! call matchdelete(b:highlight_cursor_word_id)
+    let b:highlight_cursor_word = ""
+  endif
+endfunction
+
+function! s:hl_cword()
+  let word = expand("<cword>")
+  if word == ""
+    return
+  endif
+  if get(b:, "highlight_cursor_word", "") ==# word
+    return
+  endif
+  call s:hl_clear()
+  if g:enable_highlight_cursor_word == 0
+    return
+  endif
+  if !empty(filter(split(word, '\zs'), "strlen(v:val) > 1"))
+    return
+  endif
+  let pattern = printf("\\<%s\\>", expand("<cword>"))
+  silent! let b:highlight_cursor_word_id = matchadd("CursorWord", pattern)
+  let b:highlight_cursor_word = word
+endfunction
+" -------------------------------------
