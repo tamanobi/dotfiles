@@ -4,11 +4,22 @@
 # SSHで接続した先で日本語が使えるようにする
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+# VIM
+if [ -f ~/mylib/vim/src/vim ]; then
+  export MYVIM="VIMRUNTIME=~/mylib/vim/runtime ~/mylib/vim/src/vim"
+else
+  export MYVIM=/usr/local/bin/vim
+fi
 # エディタ
-export EDITOR=/usr/local/bin/vim
+export EDITOR="${MYVIM}"
 # ページャ
-export PAGER=/usr/local/bin/vimpager
-export MANPAGER=/usr/local/bin/vimpager
+if [ -f /usr/local/bin/vimpager ]; then
+  export PAGER=/usr/local/bin/vimpager
+  export MANPAGER=/usr/local/bin/vimpager
+else
+  export PAGER=/usr/bin/less
+  export MANPAGER=/usr/bin/less
+fi
 
 # -------------------------------------
 # zshのオプション
@@ -127,7 +138,9 @@ compinit -u
 # -n 行数表示, -I バイナリファイル無視, svn関係のファイルを無視
 alias grep="grep --color -n -I --exclude='*.svn-*' --exclude='entries' --exclude='*/cache/*'"
 alias e="emacs"
-alias v="vim"
+alias vim="${MYVIM}"
+alias vi="${MYVIM}"
+alias v="${MYVIM}"
 alias google="w3c"
 
 # ls
@@ -179,12 +192,12 @@ function ptvim(){
   local file
   file=$(pt $@ | peco | awk -F: '{printf  $1 " -c" $2}'| sed -e 's/\-c$//')
   if [ ${#file} -gt 0 ]; then
-    eval 'vim ${=file}'
+    eval '${MYVIM} ${=file}'
   fi
 }
 
 function peco-dir-open-app () {
-    find . | peco -b 100 | xargs sh -c 'vim "$0" < /dev/tty'
+    find . | peco -b 100 | xargs sh -c '${MYVIM} "$0" < /dev/tty'
     zle clear-screen
 }
 zle -N peco-dir-open-app
@@ -192,7 +205,7 @@ bindkey '^xo' peco-dir-open-app     # C-x t
 
 # git directory
 function peco-git-dir-open-app () {
-    git ls-files | peco | xargs sh -c 'vim "$0" < /dev/tty'
+    git ls-files | peco | xargs sh -c '${MYVIM} "$0" < /dev/tty'
     zle clear-screen
 }
 zle -N peco-git-dir-open-app
