@@ -80,6 +80,23 @@ autoload -Uz colors; colors
 autoload -Uz vcs_info
 autoload -Uz is-at-least
 
+# -------------------------------------
+# 補完機能
+# -------------------------------------
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z} r:|[-_.]=**'
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' '+m:{A-Z}={a-z}'
+# http://qiita.com/syui/items/ed2d36698a5cc314557d
+zstyle ':completion:*:default' menu select=2
+# 補完関数の表示を強化する
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' completer _expand _complete _match _prefix _approximate _list _history
+setopt auto_list  # 補完候補が複数ある時に、一覧表示
+setopt auto_menu  # 補完候補が複数あるときに自動的に一覧表示する
+#bindkey '^i'  menu-expand-or-complete
+bindkey '^i'  expand-or-complete
+bindkey '^[^i'  reverse-menu-complete
+bindkey '^[i' expand-or-complete
+
 # begin VCS
 zstyle ":vcs_info:*" enable git svn hg bzr
 zstyle ":vcs_info:*" formats "(%s)-[%b]"
@@ -126,6 +143,7 @@ RPROMPT="[%*]"
 alias grep="grep --color -n -I --exclude='*.svn-*' --exclude='entries' --exclude='*/cache/*'"
 alias e="emacs"
 alias v="vim"
+alias google="w3c"
 
 # ls
 alias ls="ls -G" # color for darwin
