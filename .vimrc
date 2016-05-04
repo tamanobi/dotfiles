@@ -3,7 +3,8 @@ set encoding=utf-8
 filetype off
 filetype plugin indent off
 inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
-colorscheme desert
+inoremap <C-J> <ESC>
+inoremap {{ <ESC>
 set history=1000
 set title
 set number
@@ -21,8 +22,10 @@ set autoindent
 set smartindent
 set hlsearch
 set incsearch
-set mouse=a
-hi CursorLineNr term=bold   cterm=BOLD ctermfg=228 ctermbg=8
+if has('mouse')
+  set mouse=a
+endif
+hi CursorLineNr term=bold cterm=bold ctermfg=228 ctermbg=8
 set list
 " 入力中のコマンドを表示する
 set showcmd
@@ -136,41 +139,65 @@ nnoremap gk k
 " ブラウザを開く
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
-" Plugin
+" Plug in
 if has('vim_starting')
-   " 初回起動時のみruntimepathにneobundleのパスを指定する
-   set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
+" -------------------------------------
 " dein
+" -------------------------------------
+" dein settings {{{
+" dein自体の自動インストール
 if &compatible
    set nocompatible
 endif
 set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
-
-call dein#begin(expand('~/.vim/dein'))
-"call dein#add({path to dein.vim directory})
-"call dein#add('Shougo/neosnippet.vim')
-call dein#add('Shougo/dein.vim')
-call dein#add('scrooloose/nerdtree')
-call dein#add('vim-airline/vim-airline-themes')
-call dein#add('vim-airline/vim-airline')
-call dein#add('Shougo/vimproc.vim')
-call dein#add('Shougo/neocomplete.vim')
-call dein#add('Shougo/neomru.vim')
-call dein#add('editorconfig/editorconfig-vim')
-call dein#add('Shougo/unite.vim')
-call dein#add('Shougo/vimfiler')
-call dein#add('scrooloose/syntastic')
-call dein#add('editorconfig/editorconfig-vim')
-call dein#add('tyru/open-browser.vim')
-call dein#add('kovisoft/slimv.git')
-call dein#add('digitaltoad/vim-pug.git')
-if has('nvim')
-  call dein#add('Shougo/deoplete.nvim')
-  let g:deoplete#enable_at_startup = 1
+let s:cache_home = expand('~/.vim')
+let s:dein_dir = s:cache_home . '/dein'
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+if !isdirectory(s:dein_repo_dir)
+  call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
 endif
-call dein#end()
+let &runtimepath = s:dein_repo_dir .",". &runtimepath
+" プラグイン読み込み＆キャッシュ作成
+let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/dein.toml'
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir, [$MYVIMRC, s:toml_file])
+  call dein#add('Shougo/dein.vim')
+  call dein#add('scrooloose/nerdtree')
+  call dein#add('vim-airline/vim-airline-themes')
+  call dein#add('vim-airline/vim-airline')
+  call dein#add('Shougo/vimproc.vim')
+  call dein#add('Shougo/neocomplete.vim')
+  call dein#add('Shougo/neomru.vim')
+  call dein#add('editorconfig/editorconfig-vim')
+  call dein#add('Shougo/unite.vim')
+  call dein#add('Shougo/vimfiler')
+  call dein#add('scrooloose/syntastic')
+  call dein#add('editorconfig/editorconfig-vim')
+  call dein#add('tyru/open-browser.vim')
+  call dein#add('kovisoft/slimv.git')
+  call dein#add('digitaltoad/vim-pug.git')
+  call dein#add('thinca/vim-quickrun')
+  if has('nvim')
+    call dein#add('Shougo/deoplete.nvim')
+    let g:deoplete#enable_at_startup = 1
+  endif
+  call dein#end()
+  call dein#save_state()
+endif
+" 不足プラグインの自動インストール
+if has('vim_starting') && dein#check_install()
+  call dein#install()
+endif
+" }}}
+" -------------------------------------
+
+" -------------------------------------
+" Quickrun
+" -------------------------------------
+nnoremap <silent> <Leader>r :<C-u>QuickRun<CR>
+" -------------------------------------
 " -------------------------------------
 " Unite settings
 " -------------------------------------
@@ -199,14 +226,16 @@ endif
 let g:airline_powerline_fonts = 1
 let g:syntastic_javascript_checkers=['eslint']
 let g:syntastic_python_checkers = ['flake8']
+" -------------------------------------
 " for slimv
+" -------------------------------------
 let g:lisp_rainbow = 1
 let g:slimv_lisp = 'ros run'
 let g:slimv_impl = 'sbcl'
 " let g:slimv_swank_cmd='!osascript -e "tell application \"iTerm\"" -e "tell the first terminal" -e "set mysession to current session" -e "launch session \"Default Session\"" -e "tell the last session" -e "exec command \"/bin/bash\"" -e "write text \"sbcl --load ~/.vim/dein/repos/github.com/kovisoft/slimv/slime/start-swank.lisp\"" -e "end tell" -e "select mysession" -e "end tell" -e "end tell"'
+" -------------------------------------
 " 検索系
 let g:netrw_nogx = 1
-au BufRead,BufNewFile,BufReadPre *.jade   set filetype=pug
 
 if dein#check_install(['vimproc'])
   call dein#install(['vimproc'])
@@ -216,7 +245,63 @@ if dein#check_install()
   call dein#install()
 endif
 
+au BufRead,BufNewFile,BufReadPre *.jade   set filetype=pug
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
 filetype detect
 syntax on
+colorscheme desert
+
+" -------------------------------------
+" Cursor Word Highlight
+" -------------------------------------
+let g:enable_highlight_cursor_word = 1
+augroup highlight-cursor-word
+  autocmd!
+  autocmd CursorMoved * call s:hl_cword()
+  " カーソル移動が重くなったと感じるようであれば
+  " CursorMoved ではなくて
+  " CursorHold を使用する
+  "     autocmd CursorHold * call s:hl_cword()
+  " 単語のハイライト設定
+  "autocmd ColorScheme * highlight CursorWord cbg=Red
+  "hi CursorWord term=bold cterm=bold ctermfg=yellow ctermbg=Red
+  "hi CursorWord term=bold cterm=bold ctermfg=red ctermbg=yellow
+  hi CursorWord term=bold,underline cterm=bold,underline
+  autocmd BufLeave * call s:hl_clear()
+  autocmd WinLeave * call s:hl_clear()
+  autocmd InsertEnter * call s:hl_clear()
+augroup END
+
+function! s:hl_clear()
+  "if exists("b:highlight_cursor_word_id") && exists("b:highlight_cursor_word")
+  "  silent! call matchdelete(b:highlight_cursor_word_id)
+  "  unlet b:highlight_cursor_word_id
+  "  unlet b:highlight_cursor_word
+  "endif
+  if exists("b:highlight_cursor_word_id") && exists("b:highlight_cursor_word")
+    silent! call matchdelete(b:highlight_cursor_word_id)
+    let b:highlight_cursor_word = ""
+  endif
+endfunction
+
+function! s:hl_cword()
+  let word = expand("<cword>")
+  if word == ""
+    return
+  endif
+  if get(b:, "highlight_cursor_word", "") ==# word
+    return
+  endif
+  call s:hl_clear()
+  if g:enable_highlight_cursor_word == 0
+    return
+  endif
+  if !empty(filter(split(word, '\zs'), "strlen(v:val) > 1"))
+    return
+  endif
+  let pattern = printf("\\<%s\\>", expand("<cword>"))
+  silent! let b:highlight_cursor_word_id = matchadd("CursorWord", pattern)
+  let b:highlight_cursor_word = word
+endfunction
+" -------------------------------------
