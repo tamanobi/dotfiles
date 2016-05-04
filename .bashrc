@@ -1,3 +1,23 @@
+# VIM
+if [ -f ~/mylib/vim/src/vim ]; then
+  export MYVIM="VIMRUNTIME=~/mylib/vim/runtime ~/mylib/vim/src/vim"
+else
+  export MYVIM=/usr/local/bin/vim
+fi
+# エディタ
+export EDITOR="${MYVIM}"
+# ページャ
+if [ -f /usr/local/bin/vimpager ]; then
+  export PAGER=/usr/local/bin/vimpager
+  export MANPAGER=/usr/local/bin/vimpager
+else
+  export PAGER=/usr/bin/less
+  export MANPAGER=/usr/bin/less
+fi
+
+alias vim="${MYVIM}"
+alias vi="${MYVIM}"
+alias v="${MYVIM}"
 alias la='ls -CFal'
 alias g='git'
 alias gco="g checkout"
