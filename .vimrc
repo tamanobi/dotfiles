@@ -1,7 +1,5 @@
 scriptencoding utf-8
 set encoding=utf-8
-filetype off
-filetype plugin indent off
 inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
 inoremap <C-J> <ESC>
 inoremap {{ <ESC>
@@ -13,7 +11,8 @@ set tabstop=2
 set shiftwidth=2
 set scrolloff=1000
 set ignorecase
-set wrapscan
+set smartcase
+set nowrapscan
 set noswapfile
 set nobackup
 set smarttab
@@ -22,6 +21,8 @@ set autoindent
 set smartindent
 set hlsearch
 set incsearch
+" http://www.atmarkit.co.jp/ait/articles/1107/21/news115_3.html
+set backspace=start,eol,indent
 if has('mouse')
   set mouse=a
 endif
@@ -29,7 +30,6 @@ hi CursorLineNr term=bold cterm=bold ctermfg=228 ctermbg=8
 set list
 " 入力中のコマンドを表示する
 set showcmd
-" 対応する括弧を表示
 set showmatch
 set matchtime=1
 set display=lastline
@@ -123,13 +123,28 @@ inoremap <C-U> <C-O>^<C-O>d$
 inoremap <C-H> <BS>
 " 割当
 nnoremap ; :
-inoremap <C-J> <ESC>
-nnoremap <C-L> <ESC>
-vnoremap <C-L> <ESC>
+nnoremap : ;
+vnoremap ; :
+vnoremap : ;
+cnoremap <C-f>  <Right>
+cnoremap <C-b>  <Left>
+cnoremap <C-a>  <C-b>
+cnoremap <C-e>  <C-e>
+cnoremap <C-u> <C-e><C-u>
+cnoremap <C-v> <C-f>a
 " magic
 " nnoremap / /\v
+" 行末から次の行へ移動できる
+set whichwrap=b,s,<,>,[,]
 
 nnoremap <silent><C-e> :NERDTreeToggle<CR>
+cnoremap <expr> / (getcmdtype() == '/') ? '\/' : '/'
+" for speed-up replacing
+nnoremap gs  :<C-u>%s///g<Left><Left>
+vnoremap gs  :s///g<Left><Left>
+" 空行を挿入
+nnoremap <Space>o  :<C-u>for i in range(v:count1) \| call append(line('.'), '') \| endfor<CR>
+nnoremap <Space>O  :<C-u>for i in range(v:count1) \| call append(line('.')-1, '') \| endfor<CR>
 
 " cursor
 nnoremap j gj
@@ -249,7 +264,7 @@ au BufRead,BufNewFile,BufReadPre *.jade   set filetype=pug
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
 filetype detect
-syntax on
+syntax enable
 colorscheme desert
 
 " -------------------------------------
