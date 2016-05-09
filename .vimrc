@@ -139,6 +139,7 @@ set whichwrap=b,s,<,>,[,]
 
 nnoremap <silent><C-e> :NERDTreeToggle<CR>
 cnoremap <expr> / (getcmdtype() == '/') ? '\/' : '/'
+cnoremap <expr> ? (getcmdtype() == '?') ? '\?' : '?'
 " for speed-up replacing
 nnoremap gs  :<C-u>%s///g<Left><Left>
 vnoremap gs  :s///g<Left><Left>
@@ -179,6 +180,7 @@ let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/dein.toml'
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir, [$MYVIMRC, s:toml_file])
   call dein#add('Shougo/dein.vim')
+  call dein#add('jiangmiao/auto-pairs')
   call dein#add('scrooloose/nerdtree')
   call dein#add('vim-airline/vim-airline-themes')
   call dein#add('vim-airline/vim-airline')
@@ -320,3 +322,42 @@ function! s:hl_cword()
   let b:highlight_cursor_word = word
 endfunction
 " -------------------------------------
+" grep設定
+" ag -> ack -> grep の順に優先して使用
+if executable('ag')
+    set grepprg=ag\ --nogroup\ -iS
+    set grepformat=%f:%l:%m
+elseif executable('ack')
+    set grepprg=ack\ --nogroup
+    set grepformat=%f:%l:%m
+else
+    set grepprg=grep\ -Hnd\ skip\ -r
+    set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
+endif
+
+" 拡張子指定grep
+command! -bang -nargs=+ -complete=file Grep call s:Grep(<bang>0, <f-args>)
+function! s:Grep(bang, pattern, directory, ...)
+    let grepcmd = []
+    call add(grepcmd, 'grep' . (a:bang ? '!' : ''))
+    if executable('ag')
+        if a:0 && a:1 != ''
+            call add(grepcmd, '-G "\.' . a:1 . '$"')
+        else
+            call add(grepcmd, '-a')
+        endif
+    elseif executable('ack')
+        if a:0 && a:1 != ''
+            call add(grepcmd, '--' . a:1)
+        else
+            call add(grepcmd, '--all')
+        endif
+    else
+        if a:0 && a:1 != ''
+            call add(grepcmd, '--include="*.' . a:1 . '"')
+        endif
+    endif
+    call add(grepcmd, a:pattern)
+    call add(grepcmd, a:directory)
+    execute join(grepcmd, ' ')
+endfunction
