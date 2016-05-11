@@ -126,10 +126,10 @@ nnoremap ; :
 nnoremap : ;
 vnoremap ; :
 vnoremap : ;
-cnoremap <C-f>  <Right>
-cnoremap <C-b>  <Left>
-cnoremap <C-a>  <C-b>
-cnoremap <C-e>  <C-e>
+cnoremap <C-f> <Right>
+cnoremap <C-b> <Left>
+cnoremap <C-a> <C-b>
+cnoremap <C-e> <C-e>
 cnoremap <C-u> <C-e><C-u>
 cnoremap <C-v> <C-f>a
 " magic
