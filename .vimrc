@@ -220,6 +220,7 @@ nnoremap <silent> <Leader>r :<C-u>QuickRun<CR>
 " Unite settings
 " -------------------------------------
 let g:unite_enable_start_insert=0
+au FileType unite nnoremap <silent> <buffer> q :q<CR>
 au FileType unite nnoremap <silent> <buffer> <C-g> :q<CR>
 au FileType unite inoremap <silent> <buffer> <C-g> <ESC>:q<CR>
 let g:unite_source_file_mru_limit = 300
