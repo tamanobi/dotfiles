@@ -77,6 +77,7 @@ nnoremap <silent> <Leader>b :<C-u>Unite -no-empty buffer tab<CR>
 nnoremap <silent> <Leader>k :<C-u>UniteWithCursorWord -no-empty file_rec file_mru buffer<CR>
 nnoremap <silent> <Leader>i :<C-u>Unite -no-empty grep:.:.:file_rec line -buffer-name=files<CR>
 nnoremap <silent> <Leader>c :<C-u>Unite -no-empty change<CR>
+nnoremap <silent> <Leader>g :<C-u>Unite grep:. -no-empty -buffer-name=search-buffer<CR><C-r>=histget('/',-1)<CR><CR>
 " -------------------------------------------------------------
 " suspend(fgで復帰する)
 nnoremap <silent> <Leader>, <C-z>
@@ -126,10 +127,10 @@ nnoremap ; :
 nnoremap : ;
 vnoremap ; :
 vnoremap : ;
-cnoremap <C-f>  <Right>
-cnoremap <C-b>  <Left>
-cnoremap <C-a>  <C-b>
-cnoremap <C-e>  <C-e>
+cnoremap <C-f> <Right>
+cnoremap <C-b> <Left>
+cnoremap <C-a> <C-b>
+cnoremap <C-e> <C-e>
 cnoremap <C-u> <C-e><C-u>
 cnoremap <C-v> <C-f>a
 " magic
@@ -139,6 +140,8 @@ set whichwrap=b,s,<,>,[,]
 
 nnoremap <silent><C-e> :NERDTreeToggle<CR>
 cnoremap <expr> / (getcmdtype() == '/') ? '\/' : '/'
+cnoremap <expr> ? (getcmdtype() == '?') ? '\?' : '?'
+cnoremap <C-g> <ESC>
 " for speed-up replacing
 nnoremap gs  :<C-u>%s///g<Left><Left>
 vnoremap gs  :s///g<Left><Left>
@@ -179,6 +182,7 @@ let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/dein.toml'
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir, [$MYVIMRC, s:toml_file])
   call dein#add('Shougo/dein.vim')
+  call dein#add('jiangmiao/auto-pairs')
   call dein#add('scrooloose/nerdtree')
   call dein#add('vim-airline/vim-airline-themes')
   call dein#add('vim-airline/vim-airline')
@@ -209,6 +213,10 @@ endif
 " -------------------------------------
 
 " -------------------------------------
+" Quickfix
+" -------------------------------------
+au FileType qf nnoremap <silent><buffer>q :quit<CR>
+" -------------------------------------
 " Quickrun
 " -------------------------------------
 nnoremap <silent> <Leader>r :<C-u>QuickRun<CR>
@@ -217,6 +225,7 @@ nnoremap <silent> <Leader>r :<C-u>QuickRun<CR>
 " Unite settings
 " -------------------------------------
 let g:unite_enable_start_insert=0
+au FileType unite nnoremap <silent> <buffer> q :q<CR>
 au FileType unite nnoremap <silent> <buffer> <C-g> :q<CR>
 au FileType unite inoremap <silent> <buffer> <C-g> <ESC>:q<CR>
 let g:unite_source_file_mru_limit = 300
@@ -320,3 +329,42 @@ function! s:hl_cword()
   let b:highlight_cursor_word = word
 endfunction
 " -------------------------------------
+" grep設定
+" ag -> ack -> grep の順に優先して使用
+if executable('ag')
+    set grepprg=ag\ --nogroup\ -iS
+    set grepformat=%f:%l:%m
+elseif executable('ack')
+    set grepprg=ack\ --nogroup
+    set grepformat=%f:%l:%m
+else
+    set grepprg=grep\ -Hnd\ skip\ -r
+    set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
+endif
+
+" 拡張子指定grep
+command! -bang -nargs=+ -complete=file Grep call s:Grep(<bang>0, <f-args>)
+function! s:Grep(bang, pattern, directory, ...)
+    let grepcmd = []
+    call add(grepcmd, 'grep' . (a:bang ? '!' : ''))
+    if executable('ag')
+        if a:0 && a:1 != ''
+            call add(grepcmd, '-G "\.' . a:1 . '$"')
+        else
+            call add(grepcmd, '-a')
+        endif
+    elseif executable('ack')
+        if a:0 && a:1 != ''
+            call add(grepcmd, '--' . a:1)
+        else
+            call add(grepcmd, '--all')
+        endif
+    else
+        if a:0 && a:1 != ''
+            call add(grepcmd, '--include="*.' . a:1 . '"')
+        endif
+    endif
+    call add(grepcmd, a:pattern)
+    call add(grepcmd, a:directory)
+    execute join(grepcmd, ' ')
+endfunction
