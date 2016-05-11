@@ -12,7 +12,7 @@ set shiftwidth=2
 set scrolloff=1000
 set ignorecase
 set smartcase
-set nowrapscan
+set wrapscan
 set noswapfile
 set nobackup
 set smarttab
