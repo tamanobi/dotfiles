@@ -140,6 +140,7 @@ set whichwrap=b,s,<,>,[,]
 nnoremap <silent><C-e> :NERDTreeToggle<CR>
 cnoremap <expr> / (getcmdtype() == '/') ? '\/' : '/'
 cnoremap <expr> ? (getcmdtype() == '?') ? '\?' : '?'
+cnoremap <C-g> <ESC>
 " for speed-up replacing
 nnoremap gs  :<C-u>%s///g<Left><Left>
 vnoremap gs  :s///g<Left><Left>
