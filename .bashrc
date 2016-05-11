@@ -1,6 +1,7 @@
 # VIM
 if [ -f ~/mylib/vim/src/vim ]; then
-  export MYVIM="VIMRUNTIME=~/mylib/vim/runtime ~/mylib/vim/src/vim"
+  export VIMRUNTIME=~/mylib/vim/runtime
+  export MYVIM=~/mylib/vim/src/vim
 else
   export MYVIM=/usr/local/bin/vim
 fi
