@@ -77,6 +77,7 @@ nnoremap <silent> <Leader>b :<C-u>Unite -no-empty buffer tab<CR>
 nnoremap <silent> <Leader>k :<C-u>UniteWithCursorWord -no-empty file_rec file_mru buffer<CR>
 nnoremap <silent> <Leader>i :<C-u>Unite -no-empty grep:.:.:file_rec line -buffer-name=files<CR>
 nnoremap <silent> <Leader>c :<C-u>Unite -no-empty change<CR>
+nnoremap <silent> <Leader>g :<C-u>Unite grep:. -no-empty -buffer-name=search-buffer<CR><C-r>=histget('/',-1)<CR><CR>
 " -------------------------------------------------------------
 " suspend(fgで復帰する)
 nnoremap <silent> <Leader>, <C-z>
