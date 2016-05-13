@@ -132,6 +132,8 @@ cnoremap <C-a> <C-b>
 cnoremap <C-e> <C-e>
 cnoremap <C-u> <C-e><C-u>
 cnoremap <C-v> <C-f>a
+" windowをもっと使いやすく
+nnoremap <ESC>w <C-w>
 " magic
 " nnoremap / /\v
 " 行末から次の行へ移動できる
