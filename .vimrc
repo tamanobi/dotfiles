@@ -84,13 +84,14 @@ nnoremap <silent> <Leader>, <C-z>
 " 強制書き込みコマンド
 cabbr w!! w !sudo tee > /dev/null %
 
-" Key Map
+" 入力支援
 inoremap {<Enter> {}<Left><CR><ESC><S-o>
 inoremap [<Enter> []<Left><CR><ESC><S-o>
 inoremap (<Enter> ()<Left><CR><ESC><S-o>
-vnoremap { "zdi^V{<C-R>z}<ESC>
-vnoremap [ "zdi^V[<C-R>z]<ESC>
+vnoremap { "zdi{<C-R>z}<ESC>
+vnoremap [ "zdi[<C-R>z]<ESC>
 vnoremap ' "zdi'<C-R>z'<ESC>
+vnoremap " "zdi"<C-R>z"<ESC>
 " Buffer
 nnoremap <C-n> :bp<CR>
 nnoremap <C-p> :bn<CR>
@@ -107,10 +108,8 @@ endif
 " @see also: http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\""
 " カスタマイズ
-noremap! <C-A> <Home>
-noremap! <C-E> <End>
-noremap! <C-F> <Right>
-noremap! <C-B> <Left>
+nnoremap <C-A> ^
+nnoremap <C-E> $
 nnoremap <C-H> ^
 nnoremap <C-L> $
 " jjでエスケープ
@@ -140,8 +139,8 @@ set whichwrap=b,s,<,>,[,]
 nnoremap <silent><C-e> :NERDTreeToggle<CR>
 cnoremap <expr> / (getcmdtype() == '/') ? '\/' : '/'
 " for speed-up replacing
-nnoremap gs  :<C-u>%s///g<Left><Left>
-vnoremap gs  :s///g<Left><Left>
+nnoremap gr  :<C-u>%s///g<Left><Left>
+vnoremap gr  :s///g<Left><Left>
 " 空行を挿入
 nnoremap <Space>o  :<C-u>for i in range(v:count1) \| call append(line('.'), '') \| endfor<CR>
 nnoremap <Space>O  :<C-u>for i in range(v:count1) \| call append(line('.')-1, '') \| endfor<CR>
@@ -264,7 +263,7 @@ au BufRead,BufNewFile,BufReadPre *.jade   set filetype=pug
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
 filetype detect
-syntax enable
+syntax on
 colorscheme desert
 
 " -------------------------------------
