@@ -1,3 +1,4 @@
+exec /bin/zsh
 # VIM
 if [ -f ~/mylib/vim/src/vim ]; then
   export VIMRUNTIME=~/mylib/vim/runtime
@@ -24,8 +25,8 @@ alias g='git'
 alias gco="git checkout"
 alias gst="git status"
 alias gdf="git diff"
-alias gg="git grep"
-alias gbr="git branch"
+alias gg="git grep -n"
+alias gb="git branch"
 alias glg="git log --graph --oneline --color"
 # dstat
 alias dstat-full='dstat -Tclmdrn'

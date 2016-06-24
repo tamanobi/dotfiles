@@ -77,7 +77,7 @@ nnoremap <silent> <Leader>b :<C-u>Unite -no-empty buffer tab<CR>
 nnoremap <silent> <Leader>k :<C-u>UniteWithCursorWord -no-empty file_rec file_mru buffer<CR>
 nnoremap <silent> <Leader>i :<C-u>Unite -no-empty grep:.:.:file_rec line -buffer-name=files<CR>
 nnoremap <silent> <Leader>c :<C-u>Unite -no-empty change<CR>
-nnoremap <silent> <Leader>g :<C-u>Unite grep:. -no-empty -buffer-name=search-buffer<CR><C-r>=histget('/',-1)<CR><CR>
+nnoremap <silent> <Leader>g :<C-u>Unite grep:. -no-empty -buffer-name=search-buffer<CR><C-r>=histget('/',-1)<CR>
 " -------------------------------------------------------------
 " suspend(fgで復帰する)
 nnoremap <silent> <Leader>, <C-z>
@@ -93,6 +93,8 @@ vnoremap { "zdi{<C-R>z}<ESC>
 vnoremap [ "zdi[<C-R>z]<ESC>
 vnoremap ' "zdi'<C-R>z'<ESC>
 vnoremap " "zdi"<C-R>z"<ESC>
+" 選択範囲を検索
+vnoremap / "zy<ESC>/<C-R>z<CR>
 " Buffer
 nnoremap <C-n> :bp<CR>
 nnoremap <C-p> :bn<CR>
@@ -115,8 +117,7 @@ nnoremap <C-H> ^
 nnoremap <C-L> $
 " jjでエスケープ
 inoremap <silent> jj <ESC>
-inoremap <C-H> <C-O>^
-inoremap <C-L> <C-O>$
+inoremap <silent> jk <ESC>
 " ターミナルの操作と統一
 inoremap <C-W> <C-O>b<C-O>cw
 inoremap <C-U> <C-O>^<C-O>d$
@@ -131,7 +132,7 @@ cnoremap <C-b> <Left>
 cnoremap <C-a> <C-b>
 cnoremap <C-e> <C-e>
 cnoremap <C-u> <C-e><C-u>
-cnoremap <C-v> <C-f>a
+"cnoremap <C-v> <C-f>a
 " magic
 " nnoremap / /\v
 " 行末から次の行へ移動できる
@@ -185,7 +186,7 @@ if dein#load_state(s:dein_dir)
   call dein#add('scrooloose/nerdtree')
   call dein#add('vim-airline/vim-airline-themes')
   call dein#add('vim-airline/vim-airline')
-  call dein#add('Shougo/vimproc.vim')
+  call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
   call dein#add('Shougo/neocomplete.vim')
   call dein#add('Shougo/neomru.vim')
   call dein#add('editorconfig/editorconfig-vim')
@@ -197,6 +198,8 @@ if dein#load_state(s:dein_dir)
   call dein#add('kovisoft/slimv.git')
   call dein#add('digitaltoad/vim-pug.git')
   call dein#add('thinca/vim-quickrun')
+  call dein#add('maxbrunsfeld/vim-yankstack')
+  call dein#add('tpope/vim-surround')
   if has('nvim')
     call dein#add('Shougo/deoplete.nvim')
     let g:deoplete#enable_at_startup = 1
@@ -275,6 +278,9 @@ filetype detect
 syntax on
 colorscheme desert
 
+let g:yankstack_yank_keys = ['y', 'd', 'c']
+nmap <leader>p <Plug>yankstack_substitute_older_paste
+nmap <leader>P <Plug>yankstack_substitute_newer_paste
 " -------------------------------------
 " Cursor Word Highlight
 " -------------------------------------
@@ -340,6 +346,7 @@ else
     set grepprg=grep\ -Hnd\ skip\ -r
     set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
 endif
+let &grepprg = 'git grep -n'
 
 " 拡張子指定grep
 command! -bang -nargs=+ -complete=file Grep call s:Grep(<bang>0, <f-args>)
