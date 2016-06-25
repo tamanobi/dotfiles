@@ -6,7 +6,8 @@ export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 # VIM
 if [ -f ~/mylib/vim/src/vim ]; then
-  export MYVIM="VIMRUNTIME=~/mylib/vim/runtime ~/mylib/vim/src/vim"
+  export VIMRUNTIME=~/mylib/vim/runtime
+  export MYVIM="~/mylib/vim/src/vim"
 else
   export MYVIM=/usr/local/bin/vim
 fi
@@ -92,14 +93,16 @@ function vcs_prompt_info() {
 }
 # end VCS
 
-#OK="^_^ "
-#NG=">_< "
-OK=$'\U1F60C '
-NG=$'\U1F525 '
+OK="-_- "
+NG=">_< "
+#OK=$'\U1F60C '
+#NG=$'\U1F525 '
+#OK="(>ω <) "
+#NG="(>_<) "
 
 PROMPT=""
 PROMPT+="%(?.%F{green}$OK%f.%F{red}$NG%f) "
-PROMPT+="%F{blue}%~%f"
+PROMPT+="%F{white}%~%f"
 PROMPT+="\$(vcs_prompt_info)"
 PROMPT+="
 "
@@ -133,9 +136,14 @@ autoload -U compinit
 compinit -u
 
 # -------------------------------------
+# ライブラリ
+# -------------------------------------
+alias gnuplot="~/mylib/gnuplot-5.0.3/src/gnuplot"
+alias peco="~/mylib/peco_linux_amd64/peco"
+
+# -------------------------------------
 # エイリアス
 # -------------------------------------
-# -n 行数表示, -I バイナリファイル無視, svn関係のファイルを無視
 alias grep="grep --color -n -I --exclude='*.svn-*' --exclude='entries' --exclude='*/cache/*'"
 alias e="emacs"
 alias vim="${MYVIM}"
@@ -155,15 +163,21 @@ alias tree="tree -NC" # N: 文字化け対策, C:色をつける
 # -------------------------------------
 # git alias
 # -------------------------------------
+alias t="tig"
 alias g="git"
-alias gg="git grep"
-alias g="git"
-alias gs="git status"
-alias gco="git checkout"
+alias gti="git"
+alias gg="git grep -n"
 alias gcm="git commit"
-alias glg="git log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s"
-alias gb="git for-each-ref --sort='-*committerdate' --format='%(refname:short)' refs/heads/"
-alias -g B='`gb | peco | sed -e "s/^\* //g" | awk "{print $1}"`'
+alias gs="git status"
+alias go="git checkout"
+alias gco="git checkout"
+alias gb="git branch"
+alias gbc='git for-each-ref --sort=-committerdate --format="%(refname:short)" refs/heads/'
+alias gbd='git for-each-ref --sort=-committerdate --format="%(authordate:short) %(refname:short)" refs/heads/ | xargs -I{} printf "%s\n" {}'
+alias -g B='`gbc | peco --prompt "[GIT BRANCH]> " | sed -e "s/^\* //g" | awk "{print $1}"`'
+alias -g S='`git stash list | peco --prompt "[GIT STASH]> " | cut -d: -f1`'
+#alias glg="git log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s"
+#alias gb="git for-each-ref --sort='-*committerdate' --format='%(refname:short)' refs/heads/"
 alias pd="popd"
 # -------------------------------------
 # キーバインド
@@ -188,6 +202,11 @@ function title {
     echo -ne "\033]0;"$*"\007"
 }
 
+function catch-up(){
+  eval 'git checkout master && git pull origin master && git checkout -'
+}
+alias catch="catch-up"
+
 function ptvim(){
   local file
   file=$(pt $@ | peco | awk -F: '{printf  $1 " -c" $2}'| sed -e 's/\-c$//')
@@ -198,15 +217,21 @@ function ptvim(){
 
 function peco-dir-open-app () {
     find . | peco -b 100 | xargs sh -c '${MYVIM} "$0" < /dev/tty'
-    zle clear-screen
+    zle accept-line
+    #zle clear-screen
 }
 zle -N peco-dir-open-app
 bindkey '^xo' peco-dir-open-app     # C-x t
 
 # git directory
 function peco-git-dir-open-app () {
-    git ls-files | peco | xargs sh -c '${MYVIM} "$0" < /dev/tty'
-    zle clear-screen
+    local SELECTED_FILE=$(git ls-files | peco | xargs echo)
+    if [ -n "$SELECTED_FILE" ]; then
+      BUFFER="${MYVIM} $SELECTED_FILE"
+      CURSOR=$#BUFFER
+    fi
+    zle accept-line
+    #zle clear-screen
 }
 zle -N peco-git-dir-open-app
 bindkey '^o' peco-git-dir-open-app     # C-o
@@ -235,7 +260,7 @@ source ~/.zplug/zplug
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting"
 zplug "b4b4r07/enhancd", of:enhancd.sh
-zplug "hchbaw/auto-fu.zsh"
+#zplug "hchbaw/auto-fu.zsh"
 zplug "stedolan/jq", from:gh-r, as:command \
     | zplug "b4b4r07/emoji-cli", if:"which jq"
 if ! zplug check --verbose; then
@@ -246,48 +271,62 @@ if ! zplug check --verbose; then
 fi
 zplug load --verbose
 
+function peco-select-git-add() {
+  local SELECTED_FILE_TO_ADD="$(git status --short | \
+    peco --query "$LBUFFER" | \
+    awk -F ' ' '{print $NF}')"
+  if [ -n "$SELECTED_FILE_TO_ADD" ]; then
+    BUFFER="cd `pwd`/`git rev-parse --show-cdup` > /dev/null 2>&1; git add $(echo "$SELECTED_FILE_TO_ADD" | tr '\n' ' '); cd - > /    dev/null 2>&1"
+    CURSOR=$#BUFFER
+  fi
+  zle accept-line
+  # zle clear-screen
+}
+zle -N peco-select-git-add
+bindkey "^g^a" peco-select-git-add
+
 # -------------------------------------
 # auto-fu
 # -------------------------------------
-function zle-line-init () {
-  auto-fu-init
-}
-zle -N zle-line-init
-function () {
-  local code
-  code=${functions[auto-fu-init]/'\n-azfu-'/''}
-  eval "function auto-fu-init () { $code }"
-  code=${functions[auto-fu]/fg=black,bold/fg=white}
-  eval "function auto-fu () { $code }"
-}
-function afu+cancel () {
-  afu-clearing-maybe
-  ((afu_in_p == 1)) && { afu_in_p=0; BUFFER="$buffer_cur" }
-}
-function bindkey-advice-before () {
-  local key="$1"
-  local advice="$2"
-  local widget="$3"
-  [[ -z "$widget" ]] && {
-    local -a bind
-    bind=(`bindkey -M main "$key"`)
-    widget=$bind[2]
-  }
-  local fun="$advice"
-  if [[ "$widget" != "undefined-key" ]]; then
-    local code=${"$(<=(cat <<"EOT"
-      function $advice-$widget () {
-        zle $advice
-        zle $widget
-      }
-      fun="$advice-$widget"
-EOT
-    ))"}
-    eval "${${${code//\$widget/$widget}//\$key/$key}//\$advice/$advice}"
-  fi
-  zle -N "$fun"
-  bindkey -M afu "$key" "$fun"
-}
-bindkey-advice-before "^G" afu+cancel
-bindkey-advice-before "^[" afu+cancel
-bindkey-advice-before "^J" afu+cancel afu+accept-l
+# function zle-line-init () {
+#   auto-fu-init
+# }
+# zle -N zle-line-init
+# function () {
+#   local code
+#   code=${functions[auto-fu-init]/'\n-azfu-'/''}
+#   eval "function auto-fu-init () { $code }"
+#   code=${functions[auto-fu]/fg=black,bold/fg=white}
+#   eval "function auto-fu () { $code }"
+# }
+# function afu+cancel () {
+#   afu-clearing-maybe
+#   ((afu_in_p == 1)) && { afu_in_p=0; BUFFER="$buffer_cur" }
+# }
+# function bindkey-advice-before () {
+#   local key="$1"
+#   local advice="$2"
+#   local widget="$3"
+#   [[ -z "$widget" ]] && {
+#     local -a bind
+#     bind=(`bindkey -M main "$key"`)
+#     widget=$bind[2]
+#   }
+#   local fun="$advice"
+#   if [[ "$widget" != "undefined-key" ]]; then
+#     local code=${"$(<=(cat <<"EOT"
+#       function $advice-$widget () {
+#         zle $advice
+#         zle $widget
+#       }
+#       fun="$advice-$widget"
+# EOT
+#     ))"}
+#     eval "${${${code//\$widget/$widget}//\$key/$key}//\$advice/$advice}"
+#   fi
+#   zle -N "$fun"
+#   bindkey -M afu "$key" "$fun"
+# }
+# bindkey-advice-before "^G" afu+cancel
+# bindkey-advice-before "^[" afu+cancel
+# bindkey-advice-before "^J" afu+cancel afu+accept-l
