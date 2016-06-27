@@ -49,6 +49,7 @@ autoload -Uz colors
 colors
 # emacs 風キーバインドにする
 bindkey -e
+bindkey -v
 
 # -------------------------------------
 # パス
@@ -138,8 +139,18 @@ compinit -u
 # -------------------------------------
 # ライブラリ
 # -------------------------------------
-alias gnuplot="~/mylib/gnuplot-5.0.3/src/gnuplot"
-alias peco="~/mylib/peco_linux_amd64/peco"
+if [ -e ~/dotfiles/ecm ]; then
+  alias ecm=~/dotfiles/ecm
+fi
+if [ -e ~/dotfiles/tovim ]; then
+  alias tovim=~/dotfiles/tovim
+fi
+if [ -e ~/mylib/gnuplot-5.0.3/src/gnuplot ]; then
+  alias gnuplot=~/mylib/gnuplot-5.0.3/src/gnuplot
+fi
+if [ -e ~/mylib/peco_linux_amd64/peco ]; then
+  alias peco=~/mylib/peco_linux_amd64/peco
+fi
 
 # -------------------------------------
 # エイリアス
@@ -330,3 +341,13 @@ bindkey "^g^a" peco-select-git-add
 # bindkey-advice-before "^G" afu+cancel
 # bindkey-advice-before "^[" afu+cancel
 # bindkey-advice-before "^J" afu+cancel afu+accept-l
+
+# -------------------------------------
+# ssh
+# @see https://hoelz.ro/blog/making-ssh_auth_sock-work-between-detaches-in-tmux
+# -------------------------------------
+if [ ! -z "$SSH_AUTH_SOCK" -a "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent_sock"  ] ; then
+  unlink "$HOME/.ssh/agent_sock" 2>/dev/null
+  ln -s "$SSH_AUTH_SOCK" "$HOME/.ssh/agent_sock"
+  export SSH_AUTH_SOCK="$HOME/.ssh/agent_sock"
+fi

@@ -70,6 +70,8 @@ nnoremap <Leader>q :q!<CR>
 " -------------------------------------------------------------
 " Unite
 " -------------------------------------------------------------
+let g:unite_enable_start_insert=1
+nnoremap <silent> <Leader>f :<C-u>Unite -start-insert file_rec/async:!<CR>
 nnoremap <silent> <Leader>o :<C-u>Unite file file_rec<CR>
 nnoremap <silent> <Leader>m :<C-u>Unite -no-empty file_mru buffer tab<CR>
 nnoremap <silent> <Leader>l :<C-u>UniteWithCursorWord -no-empty line<CR>
@@ -186,6 +188,7 @@ if dein#load_state(s:dein_dir)
   call dein#add('scrooloose/nerdtree')
   call dein#add('vim-airline/vim-airline-themes')
   call dein#add('vim-airline/vim-airline')
+  call dein#add('LeafCage/yankround.vim')
   call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
   call dein#add('Shougo/neocomplete.vim')
   call dein#add('Shougo/neomru.vim')
@@ -198,7 +201,6 @@ if dein#load_state(s:dein_dir)
   call dein#add('kovisoft/slimv.git')
   call dein#add('digitaltoad/vim-pug.git')
   call dein#add('thinca/vim-quickrun')
-  call dein#add('maxbrunsfeld/vim-yankstack')
   call dein#add('tpope/vim-surround')
   if has('nvim')
     call dein#add('Shougo/deoplete.nvim')
@@ -278,9 +280,16 @@ filetype detect
 syntax on
 colorscheme desert
 
-let g:yankstack_yank_keys = ['y', 'd', 'c']
-nmap <leader>p <Plug>yankstack_substitute_older_paste
-nmap <leader>P <Plug>yankstack_substitute_newer_paste
+" -------------------------------------
+" Yank Round
+" -------------------------------------
+let g:yankround_max_history = 100
+nmap p <Plug>(yankround-p)
+nmap P <Plug>(yankround-P)
+nmap <expr><C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : ":bp<CR>"
+nmap <expr><C-n> yankround#is_active() ? "\<Plug>(yankround-next)" : ":bn<CR>"
+
+
 " -------------------------------------
 " Cursor Word Highlight
 " -------------------------------------
