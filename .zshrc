@@ -351,3 +351,14 @@ if [ ! -z "$SSH_AUTH_SOCK" -a "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent_sock"  ] ; t
   ln -s "$SSH_AUTH_SOCK" "$HOME/.ssh/agent_sock"
   export SSH_AUTH_SOCK="$HOME/.ssh/agent_sock"
 fi
+edit-command-buffer(){
+  ECMTMP=~/.ecm_tmp_`date +%Y-%m-%d_%H-%M-%S.txt`
+  echo $ECMTMP
+  print -rn $BUFFER | tr ' ' '\n' > $ECMTMP
+  ${MYVIM} $ECMTMP < /dev/tty > /dev/tty
+  eval `cat $ECMTMP` | tr '\n' ' ' | pbcopy
+  rm $ECMTMP
+  zle -M "pbcopy: ${BUFFER}"
+}
+zle -N edit-command-buffer
+bindkey '^x^e' edit-command-buffer
