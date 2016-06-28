@@ -94,22 +94,38 @@ function vcs_prompt_info() {
 }
 # end VCS
 
-OK="-_- "
-NG=">_< "
+OK="|_|)/"
+NG=">_<%)o"
 #OK=$'\U1F60C '
 #NG=$'\U1F525 '
 #OK="(>ω <) "
 #NG="(>_<) "
 
-PROMPT=""
-PROMPT+="%(?.%F{green}$OK%f.%F{red}$NG%f) "
-PROMPT+="%F{white}%~%f"
-PROMPT+="\$(vcs_prompt_info)"
-PROMPT+="
-"
-PROMPT+="%% "
+function zle-line-init zle-keymap-select {
+  PROMPT=""
+  PROMPT+="[%n@%m]"
 
-RPROMPT="[%*]"
+  PROMPT+="%F{white}[%~]%f"
+  PROMPT+="\$(vcs_prompt_info)"
+  case $KEYMAP in
+    vicmd)
+      VIMMODE="[NOR]"
+      ;;
+    main|viins)
+      VIMMODE="%F{yellow}[INS]%f"
+      ;;
+  esac
+  PROMPT+=$VIMMODE
+  PROMPT+="
+"
+  PROMPT+="%(?.%F{green}${OK}%f.%F{red}${NG}%f)"
+  PROMPT+=" %% "
+  RPROMPT="[%d %*]"
+  zle reset-prompt
+
+}
+zle -N zle-line-init
+zle -N zle-keymap-select
 
 # -------------------------------------
 # 補完機能
