@@ -49,6 +49,7 @@ autoload -Uz colors
 colors
 # emacs 風キーバインドにする
 bindkey -e
+bindkey -v
 
 # -------------------------------------
 # パス
@@ -93,22 +94,38 @@ function vcs_prompt_info() {
 }
 # end VCS
 
-OK="-_- "
-NG=">_< "
+OK="|_|)/"
+NG=">_<%)o"
 #OK=$'\U1F60C '
 #NG=$'\U1F525 '
 #OK="(>ω <) "
 #NG="(>_<) "
 
-PROMPT=""
-PROMPT+="%(?.%F{green}$OK%f.%F{red}$NG%f) "
-PROMPT+="%F{white}%~%f"
-PROMPT+="\$(vcs_prompt_info)"
-PROMPT+="
-"
-PROMPT+="%% "
+function zle-line-init zle-keymap-select {
+  PROMPT=""
+  PROMPT+="[%n@%m]"
 
-RPROMPT="[%*]"
+  PROMPT+="%F{white}[%~]%f"
+  PROMPT+="\$(vcs_prompt_info)"
+  case $KEYMAP in
+    vicmd)
+      VIMMODE="[NOR]"
+      ;;
+    main|viins)
+      VIMMODE="%F{yellow}[INS]%f"
+      ;;
+  esac
+  PROMPT+=$VIMMODE
+  PROMPT+="
+"
+  PROMPT+="%(?.%F{green}${OK}%f.%F{red}${NG}%f)"
+  PROMPT+=" %% "
+  RPROMPT="[%d %*]"
+  zle reset-prompt
+
+}
+zle -N zle-line-init
+zle -N zle-keymap-select
 
 # -------------------------------------
 # 補完機能
@@ -138,8 +155,18 @@ compinit -u
 # -------------------------------------
 # ライブラリ
 # -------------------------------------
-alias gnuplot="~/mylib/gnuplot-5.0.3/src/gnuplot"
-alias peco="~/mylib/peco_linux_amd64/peco"
+if [ -e ~/dotfiles/ecm ]; then
+  alias ecm=~/dotfiles/ecm
+fi
+if [ -e ~/dotfiles/tovim ]; then
+  alias tovim=~/dotfiles/tovim
+fi
+if [ -e ~/mylib/gnuplot-5.0.3/src/gnuplot ]; then
+  alias gnuplot=~/mylib/gnuplot-5.0.3/src/gnuplot
+fi
+if [ -e ~/mylib/peco_linux_amd64/peco ]; then
+  alias peco=~/mylib/peco_linux_amd64/peco
+fi
 
 # -------------------------------------
 # エイリアス
@@ -330,3 +357,24 @@ bindkey "^g^a" peco-select-git-add
 # bindkey-advice-before "^G" afu+cancel
 # bindkey-advice-before "^[" afu+cancel
 # bindkey-advice-before "^J" afu+cancel afu+accept-l
+
+# -------------------------------------
+# ssh
+# @see https://hoelz.ro/blog/making-ssh_auth_sock-work-between-detaches-in-tmux
+# -------------------------------------
+if [ ! -z "$SSH_AUTH_SOCK" -a "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent_sock"  ] ; then
+  unlink "$HOME/.ssh/agent_sock" 2>/dev/null
+  ln -s "$SSH_AUTH_SOCK" "$HOME/.ssh/agent_sock"
+  export SSH_AUTH_SOCK="$HOME/.ssh/agent_sock"
+fi
+edit-command-buffer(){
+  ECMTMP=~/.ecm_tmp_`date +%Y-%m-%d_%H-%M-%S.txt`
+  echo $ECMTMP
+  print -rn $BUFFER | tr ' ' '\n' > $ECMTMP
+  ${MYVIM} $ECMTMP < /dev/tty > /dev/tty
+  eval `cat $ECMTMP` | tr '\n' ' ' | pbcopy
+  rm $ECMTMP
+  zle -M "pbcopy: ${BUFFER}"
+}
+zle -N edit-command-buffer
+bindkey '^x^e' edit-command-buffer
