@@ -1,4 +1,9 @@
-exec /bin/zsh
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+# use zsh
+if [ -f /usr/bin/zsh  ];then
+    exec /usr/bin/zsh
+fi
 # VIM
 if [ -f ~/mylib/vim/src/vim ]; then
   export VIMRUNTIME=~/mylib/vim/runtime

@@ -96,17 +96,8 @@ function vcs_prompt_info() {
 
 OK="|_|)/"
 NG=">_<%)o"
-#OK=$'\U1F60C '
-#NG=$'\U1F525 '
-#OK="(>ω <) "
-#NG="(>_<) "
 
 function zle-line-init zle-keymap-select {
-  PROMPT=""
-  PROMPT+="[%n@%m]"
-
-  PROMPT+="%F{white}[%~]%f"
-  PROMPT+="\$(vcs_prompt_info)"
   case $KEYMAP in
     vicmd)
       VIMMODE="[NOR]"
@@ -115,14 +106,18 @@ function zle-line-init zle-keymap-select {
       VIMMODE="%F{yellow}[INS]%f"
       ;;
   esac
-  PROMPT+=$VIMMODE
+  PROMPT=""
+  PROMPT+="[%n@%m]"
+
+  PROMPT+="%F{blue}[%~]%f${VIMMODE}"
+  PROMPT+="\$(vcs_prompt_info)"
   PROMPT+="
 "
   PROMPT+="%(?.%F{green}${OK}%f.%F{red}${NG}%f)"
   PROMPT+=" %% "
-  RPROMPT="[%d %*]"
-  zle reset-prompt
+  RPROMPT="[%D %*]"
 
+  zle reset-prompt
 }
 zle -N zle-line-init
 zle -N zle-keymap-select
@@ -171,7 +166,7 @@ fi
 # -------------------------------------
 # エイリアス
 # -------------------------------------
-alias grep="grep --color -n -I --exclude='*.svn-*' --exclude='entries' --exclude='*/cache/*'"
+alias grep="grep --color -n -I -i --exclude='*.svn-*' --exclude='entries' --exclude='*/cache/*'"
 alias e="emacs"
 alias vim="${MYVIM}"
 alias vi="${MYVIM}"
@@ -193,7 +188,7 @@ alias tree="tree -NC" # N: 文字化け対策, C:色をつける
 alias t="tig"
 alias g="git"
 alias gti="git"
-alias gg="git grep -n"
+alias gg="git grep -n -i"
 alias gcm="git commit"
 alias gs="git status"
 alias go="git checkout"
@@ -378,3 +373,5 @@ edit-command-buffer(){
 }
 zle -N edit-command-buffer
 bindkey '^x^e' edit-command-buffer
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
