@@ -4,6 +4,7 @@
 # SSHで接続した先で日本語が使えるようにする
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+export GOPATH=$HOME/work
 # VIM
 if [ -f ~/mylib/vim/src/vim ]; then
   export VIMRUNTIME=~/mylib/vim/runtime
@@ -174,7 +175,7 @@ alias v="${MYVIM}"
 alias google="w3c"
 
 # ls
-alias ls="ls -G" # color for darwin
+alias ls="ls -G -F" # color for darwin
 alias l="ls -la"
 alias la="ls -la"
 alias l1="ls -1"
@@ -188,6 +189,7 @@ alias tree="tree -NC" # N: 文字化け対策, C:色をつける
 alias t="tig"
 alias g="git"
 alias gti="git"
+alias gls="git ls-files"
 alias gg="git grep -n -i"
 alias gcm="git commit"
 alias gs="git status"

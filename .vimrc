@@ -1,4 +1,5 @@
 scriptencoding utf-8
+set nocompatible
 set encoding=utf-8
 inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
 inoremap <C-J> <ESC>
@@ -21,10 +22,23 @@ set autoindent
 set smartindent
 set hlsearch
 set incsearch
+set ambiwidth=double " □や○文字が崩れる問題を解決
+
+set tabstop=4
+set autoindent
+set expandtab
+set shiftwidth=4
+
 " http://www.atmarkit.co.jp/ait/articles/1107/21/news115_3.html
-set backspace=start,eol,indent
 if has('mouse')
   set mouse=a
+  if has('mouse_sgr')
+    set ttymouse=sgr
+  elseif v:version > 703 || v:version is 703 && has('patch632')
+    set ttymouse=sgr
+  else
+    set ttymouse=xterm
+  endif
 endif
 hi CursorLineNr term=bold cterm=bold ctermfg=228 ctermbg=8
 set list
@@ -40,6 +54,7 @@ set listchars=tab:>-,extends:<,trail:-
 if has('gui') || has('xterm_clipboard')
   set clipboard=unnamed
 endif
+
 " -------------------------------------------------------------
 " STATUS LINE
 " -------------------------------------------------------------
@@ -64,22 +79,32 @@ set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [line=%04l,%04v][%p%%]%=\
 " comand shortcut
 " -------------------------------------------------------------
 let mapleader = "\<Space>"
+nnoremap <RightMouse> :echo expand('%')<CR>
+nnoremap <2-LeftMouse> :echo expand('%')<CR>
 nnoremap <Leader>w :w<CR>
+nnoremap <Leader>v :vs<CR>
+nnoremap <Leader>g :grep <C-R>=expand("<cword>")<CR>
+nnoremap <Leader>n :cn<CR>
+nnoremap <Leader>p :cp<CR>
+nnoremap <Leader>h :noh<CR>
+nnoremap <Leader>c :clist<CR>
 nnoremap <Leader>e :e<space>%:h<CR>
 nnoremap <Leader>q :q!<CR>
+nnoremap <Leader>b :buffers<CR>:buffer<SPACE>
+nnoremap <Leader>j :e <C-R>=expand('<cword>')<CR><CR>
+"set tags=/mnt/ssd1/home/yasu/local/etc/tags
+set tags=
+nnoremap tj :tag<CR>
+nnoremap tk :pop<CR>
 " -------------------------------------------------------------
 " Unite
 " -------------------------------------------------------------
 let g:unite_enable_start_insert=1
 nnoremap <silent> <Leader>f :<C-u>Unite -start-insert file_rec/async:!<CR>
-nnoremap <silent> <Leader>o :<C-u>Unite file file_rec<CR>
 nnoremap <silent> <Leader>m :<C-u>Unite -no-empty file_mru buffer tab<CR>
 nnoremap <silent> <Leader>l :<C-u>UniteWithCursorWord -no-empty line<CR>
-nnoremap <silent> <Leader>b :<C-u>Unite -no-empty buffer tab<CR>
 nnoremap <silent> <Leader>k :<C-u>UniteWithCursorWord -no-empty file_rec file_mru buffer<CR>
 nnoremap <silent> <Leader>i :<C-u>Unite -no-empty grep:.:.:file_rec line -buffer-name=files<CR>
-nnoremap <silent> <Leader>c :<C-u>Unite -no-empty change<CR>
-nnoremap <silent> <Leader>g :<C-u>Unite grep:. -no-empty -buffer-name=search-buffer<CR><C-r>=histget('/',-1)<CR>
 " -------------------------------------------------------------
 " suspend(fgで復帰する)
 nnoremap <silent> <Leader>, <C-z>
@@ -119,7 +144,6 @@ nnoremap <C-H> ^
 nnoremap <C-L> $
 " jjでエスケープ
 inoremap <silent> jj <ESC>
-inoremap <silent> jk <ESC>
 " ターミナルの操作と統一
 inoremap <C-W> <C-O>b<C-O>cw
 inoremap <C-U> <C-O>^<C-O>d$
@@ -129,6 +153,14 @@ nnoremap ; :
 nnoremap : ;
 vnoremap ; :
 vnoremap : ;
+inoremap <Up> k
+inoremap <Down> j
+inoremap <Right> l
+inoremap <Left> h
+nnoremap <Up> k
+nnoremap <Down> j
+nnoremap <Right> l
+nnoremap <Left> h
 cnoremap <C-f> <Right>
 cnoremap <C-b> <Left>
 cnoremap <C-a> <C-b>
@@ -140,83 +172,40 @@ cnoremap <C-u> <C-e><C-u>
 " 行末から次の行へ移動できる
 set whichwrap=b,s,<,>,[,]
 
-nnoremap <silent><C-e> :NERDTreeToggle<CR>
 cnoremap <expr> / (getcmdtype() == '/') ? '\/' : '/'
 cnoremap <expr> ? (getcmdtype() == '?') ? '\?' : '?'
 cnoremap <C-g> <ESC>
 " for speed-up replacing
 nnoremap gr  :<C-u>%s///g<Left><Left>
 vnoremap gr  :s///g<Left><Left>
-" 空行を挿入
-nnoremap <Space>o  :<C-u>for i in range(v:count1) \| call append(line('.'), '') \| endfor<CR>
-nnoremap <Space>O  :<C-u>for i in range(v:count1) \| call append(line('.')-1, '') \| endfor<CR>
+
+nnoremap <Space>o  :e %:h<CR>
+nnoremap <Space>t  :tabe %<CR>
 
 " cursor
 nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
+
+function! GetPHPCurrentClass()
+  normal! 99[{
+  if search('\<class\>', 'bW') == 0
+    return ''
+  endif
+  normal! Wyiw
+  normal! ``
+  return @0
+endfunction
+
+inoremap ,p x<Left><C-r>=GetPHPCurrentClass()<Enter><Delete>
+
 " ブラウザを開く
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 " Plug in
 if has('vim_starting')
 endif
-
-" -------------------------------------
-" dein
-" -------------------------------------
-" dein settings {{{
-" dein自体の自動インストール
-if &compatible
-   set nocompatible
-endif
-set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
-let s:cache_home = expand('~/.vim')
-let s:dein_dir = s:cache_home . '/dein'
-let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-if !isdirectory(s:dein_repo_dir)
-  call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
-endif
-let &runtimepath = s:dein_repo_dir .",". &runtimepath
-" プラグイン読み込み＆キャッシュ作成
-let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/dein.toml'
-if dein#load_state(s:dein_dir)
-  call dein#begin(s:dein_dir, [$MYVIMRC, s:toml_file])
-  call dein#add('Shougo/dein.vim')
-  call dein#add('jiangmiao/auto-pairs')
-  call dein#add('scrooloose/nerdtree')
-  call dein#add('vim-airline/vim-airline-themes')
-  call dein#add('vim-airline/vim-airline')
-  call dein#add('LeafCage/yankround.vim')
-  call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
-  call dein#add('Shougo/neocomplete.vim')
-  call dein#add('Shougo/neomru.vim')
-  call dein#add('editorconfig/editorconfig-vim')
-  call dein#add('Shougo/unite.vim')
-  call dein#add('Shougo/vimfiler')
-  call dein#add('scrooloose/syntastic')
-  call dein#add('editorconfig/editorconfig-vim')
-  call dein#add('tyru/open-browser.vim')
-  call dein#add('kovisoft/slimv.git')
-  call dein#add('digitaltoad/vim-pug.git')
-  call dein#add('thinca/vim-quickrun')
-  call dein#add('tpope/vim-surround')
-  call dein#add('tpope/vim-fugitive')
-  if has('nvim')
-    call dein#add('Shougo/deoplete.nvim')
-    let g:deoplete#enable_at_startup = 1
-  endif
-  call dein#end()
-  call dein#save_state()
-endif
-" 不足プラグインの自動インストール
-if has('vim_starting') && dein#check_install()
-  call dein#install()
-endif
-" }}}
-" -------------------------------------
-
 " -------------------------------------
 " Quickfix
 " -------------------------------------
@@ -225,6 +214,7 @@ au FileType qf nnoremap <silent><buffer>q :quit<CR>
 " Quickrun
 " -------------------------------------
 nnoremap <silent> <Leader>r :<C-u>QuickRun<CR>
+nnoremap <Leader>3 :e #<CR>
 " -------------------------------------
 " -------------------------------------
 " Unite settings
@@ -266,29 +256,16 @@ let g:slimv_impl = 'sbcl'
 " 検索系
 let g:netrw_nogx = 1
 
-if dein#check_install(['vimproc'])
-  call dein#install(['vimproc'])
-endif
-" その他インストールしていないものはこちらに入れる
-if dein#check_install()
-  call dein#install()
-endif
-
 au BufRead,BufNewFile,BufReadPre *.jade   set filetype=pug
-" ファイルタイプ別のプラグイン/インデントを有効にする
-filetype plugin indent on
-filetype detect
-syntax on
-colorscheme desert
 
 " -------------------------------------
 " Yank Round
 " -------------------------------------
 let g:yankround_max_history = 100
-nmap p <Plug>(yankround-p)
-nmap P <Plug>(yankround-P)
-nmap <expr><C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : ":bp<CR>"
-nmap <expr><C-n> yankround#is_active() ? "\<Plug>(yankround-next)" : ":bn<CR>"
+"nmap p <Plug>(yankround-p)
+"nmap P <Plug>(yankround-P)
+"nmap <expr><C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : ":bp<CR>"
+"nmap <expr><C-n> yankround#is_active() ? "\<Plug>(yankround-next)" : ":bn<CR>"
 
 
 " -------------------------------------
@@ -356,7 +333,7 @@ else
     set grepprg=grep\ -Hnd\ skip\ -r
     set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
 endif
-let &grepprg = 'git grep -n'
+let &grepprg = 'git grep -n -i'
 
 " 拡張子指定grep
 command! -bang -nargs=+ -complete=file Grep call s:Grep(<bang>0, <f-args>)
@@ -422,10 +399,10 @@ function! s:my_cr_function()
   "return pumvisible() ? "\<C-y>" : "\<CR>"
 endfunction
 " <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 " <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+"inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+"inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 " Close popup by <Space>.
 "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
@@ -456,3 +433,120 @@ endif
 " For perlomni.vim setting.
 " https://github.com/c9s/perlomni.vim
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+
+" -------------------------------------
+" dein
+" -------------------------------------
+" dein settings {{{
+" dein自体の自動インストール
+if &compatible
+   set nocompatible
+endif
+" set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+" let s:cache_home = expand('~/.vim')
+" let s:dein_dir = s:cache_home . '/dein'
+" let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+" if !isdirectory(s:dein_repo_dir)
+"   call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
+" endif
+" let &runtimepath = s:dein_repo_dir .",". &runtimepath
+" " プラグイン読み込み＆キャッシュ作成
+" let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/dein.toml'
+" if dein#load_state(s:dein_dir)
+"   call dein#begin(s:dein_dir, [$MYVIMRC, s:toml_file])
+"   call dein#add('Shougo/dein.vim')
+"   call dein#add('jiangmiao/auto-pairs')
+"   call dein#add('scrooloose/nerdtree')
+"   call dein#add('vim-airline/vim-airline-themes')
+"   call dein#add('vim-airline/vim-airline')
+"   call dein#add('LeafCage/yankround.vim')
+"   call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
+"   call dein#add('Shougo/neocomplete.vim')
+"   call dein#add('Shougo/neomru.vim')
+"   call dein#add('editorconfig/editorconfig-vim')
+"   call dein#add('Shougo/unite.vim')
+"   call dein#add('Shougo/vimfiler')
+"   call dein#add('scrooloose/syntastic')
+"   call dein#add('editorconfig/editorconfig-vim')
+"   call dein#add('tyru/open-browser.vim')
+"   call dein#add('kovisoft/slimv.git')
+"   call dein#add('digitaltoad/vim-pug.git')
+"   call dein#add('thinca/vim-quickrun')
+"   call dein#add('tpope/vim-surround')
+"   call dein#add('tpope/vim-fugitive')
+"   if has('nvim')
+"     call dein#add('Shougo/deoplete.nvim')
+"     let g:deoplete#enable_at_startup = 1
+"   endif
+"   call dein#end()
+"   call dein#save_state()
+" endif
+" if dein#check_install(['vimproc'])
+"   call dein#install(['vimproc'])
+" endif
+" 
+" " 不足プラグインの自動インストール
+" if has('vim_starting') && dein#check_install()
+"   call dein#install()
+" endif
+
+" }}}
+
+function! Test()
+	let lines = [
+		\ "回答を選択してください。",
+		\ "1 : A answer",
+		\ "2 : B answer",
+		\ "3 : C answer",
+		\ "4 : D answer"
+		\ ]
+	let choice = inputlist(lines)
+	if choice == 1
+		echo "user select 'A answer'"
+	elseif choice == 2
+		echo "user select 'B answer'"
+	elseif choice == 3
+		echo "user select 'C answer'"
+	elseif choice == 4
+		echo "user select 'D answer'"
+	else
+		echo "1から4までのどれかを選択してください"
+	endif
+endfunction
+
+" バッファーを開く
+function! OpenBufferList()
+  redir => buffer_selector
+  execute "silent ls"
+  redir END
+  vnew
+  setlocal modifiable noreadonly
+  setlocal bufhidden=unload
+  setlocal noswapfile
+  setlocal filetype=bufferselector
+  silent put =buffer_selector
+  execute "1,2delete _"
+  setlocal nomodifiable readonly
+endfunction
+function! SelectThisBuffer()
+  let line = getline(".")
+  let line = substitute(line, '^\s\+\|\s\+$', "", "g")
+  let line = substitute(line, '\s\+', " ", "g")
+  let repl = split(line, " ")
+  execute repl[0]."buffer!"
+endfunction
+autocmd FileType bufferselector nnoremap <buffer> q :close!<CR>
+autocmd FileType bufferselector nnoremap <buffer> <CR> :call SelectThisBuffer()<CR>
+
+set makeprg=~/pixiv/dev-script/pixiv-lint
+set errorformat&
+let &errorformat .= ",file:%f\tline:%l\tcol:%c-%*\\d\tlevel:%t%*\\S\tdesc:%m"
+
+" -------------------------------------
+" ファイルタイプ別のプラグイン/インデントを有効にする
+filetype plugin indent on
+filetype detect
+syntax on
+set synmaxcol=500
+colorscheme desert
+
