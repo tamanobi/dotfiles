@@ -189,6 +189,7 @@ alias tree="tree -NC" # N: 文字化け対策, C:色をつける
 alias t="tig"
 alias g="git"
 alias gti="git"
+alias gd="git diff"
 alias gls="git ls-files"
 alias gg="git grep -n -i"
 alias gcm="git commit"
