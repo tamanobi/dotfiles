@@ -22,6 +22,7 @@ else
   export PAGER=/usr/bin/less
   export MANPAGER=/usr/bin/less
 fi
+export PATH=$HOME/local/bin:$PATH
 
 # -------------------------------------
 # zshのオプション
