@@ -514,6 +514,17 @@ function! Test()
 	endif
 endfunction
 
+function! Gitadd()
+  let f = expand("%")
+  call system('git add '.f)
+endfunction
+nnoremap <Leader>a :call Gitadd()<CR>
+
+function! Gitcommit()
+  call system('git commit -v')
+endfunction
+nnoremap <Leader>m :call Gitcommit()<CR>
+
 " バッファーを開く
 function! OpenBufferList()
   redir => buffer_selector
