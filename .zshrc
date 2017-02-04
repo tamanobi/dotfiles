@@ -54,6 +54,9 @@ colors
 bindkey -e
 bindkey -v
 
+HISTFILE=$HOME/.zsh_history
+HISTSIZE=1000000
+sAVEHIST=1000000
 # -------------------------------------
 # パス
 # -------------------------------------
