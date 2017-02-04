@@ -1,10 +1,6 @@
 # -------------------------------------
 # 環境変数
 # -------------------------------------
-# SSHで接続した先で日本語が使えるようにする
-export LC_CTYPE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-export GOPATH=$HOME/work
 # VIM
 if [ -f ~/mylib/vim/src/vim ]; then
   export VIMRUNTIME=~/mylib/vim/runtime
@@ -22,8 +18,6 @@ else
   export PAGER=/usr/bin/less
   export MANPAGER=/usr/bin/less
 fi
-export PATH=$HOME/local/bin:$PATH
-export LD_LIBRARY_PATH=$HOME/local/lib:$LD_LIBRARY_PATH
 
 # -------------------------------------
 # zshのオプション
