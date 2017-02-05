@@ -1,0 +1,4 @@
+[alias]
+    pl = !git pull origin $(git rev-parse --abbrev-ref HEAD)
+    ps = !git push origin $(git rev-parse --abbrev-ref HEAD)
+    nb = "!newbranch () { git fetch; git checkout -b $1 origin/master;}; newbranch"
