@@ -1,10 +1,6 @@
 # -------------------------------------
 # 環境変数
 # -------------------------------------
-# SSHで接続した先で日本語が使えるようにする
-export LC_CTYPE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-export GOPATH=$HOME/work
 # VIM
 if [ -f ~/mylib/vim/src/vim ]; then
   export VIMRUNTIME=~/mylib/vim/runtime
@@ -52,6 +48,9 @@ colors
 bindkey -e
 bindkey -v
 
+HISTFILE=$HOME/.zsh_history
+HISTSIZE=1000000
+sAVEHIST=1000000
 # -------------------------------------
 # パス
 # -------------------------------------
@@ -189,6 +188,7 @@ alias tree="tree -NC" # N: 文字化け対策, C:色をつける
 alias t="tig"
 alias g="git"
 alias gti="git"
+alias gd="git diff"
 alias gls="git ls-files"
 alias gg="git grep -n -i"
 alias gcm="git commit"
