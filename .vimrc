@@ -102,9 +102,6 @@ nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
-" Buffer
-nnoremap <C-n> :bp<CR>
-nnoremap <C-p> :bn<CR>
 " Tabpage
 nnoremap <C-k> :<C-u>tabp<CR>
 nnoremap <C-j> :<C-u>tabn<CR>
