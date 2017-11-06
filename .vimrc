@@ -214,12 +214,6 @@ let g:ctrlp_extensions = ['tag', 'quickfix', 'dir', 'line', 'mixed']
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:18'
 
 let g:vlime_leader = ","
-"let g:slimv_lisp = 'ros run'
-"let g:slimv_impl = 'sbcl'
-"let g:slimv_swank_cmd = "!ros -e '(ql:quickload :swank) (swank:create-server)' wait &"
-"let g:slimv_lisp = 'ros run'
-"let g:slimv_impl = 'sbcl'
-" let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"sbcl --load ~/.vim/slime/start-swank.lisp\""'
 
 call minpac#update()
 packloadall
