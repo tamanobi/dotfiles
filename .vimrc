@@ -113,8 +113,6 @@ nnoremap ; :
 nnoremap : ;
 vnoremap ; :
 vnoremap : ;
-nnoremap <Enter> :
-vnoremap <Enter> :
 " for speed-up replacing
 nnoremap gr  :<C-u>%s///g<Left><Left>
 vnoremap gr  :s///g<Left><Left>
@@ -122,15 +120,6 @@ vnoremap gr  :s///g<Left><Left>
 nnoremap <Leader>o  :e %:h<CR>
 nnoremap <Leader>3  :e #<CR>
 nnoremap <Leader>t  :tabe %<CR>
-
-" 入力支援
-inoremap {<Enter> {}<Left><CR><ESC><S-o>
-inoremap [<Enter> []<Left><CR><ESC><S-o>
-inoremap (<Enter> ()<Left><CR><ESC><S-o>
-vnoremap { "zdi{<C-R>z}<ESC>
-vnoremap [ "zdi[<C-R>z]<ESC>
-vnoremap ' "zdi'<C-R>z'<ESC>
-vnoremap " "zdi"<C-R>z"<ESC>
 
 " 選択範囲を検索
 vnoremap / "zy<ESC>/<C-R>z<CR>
