@@ -192,6 +192,36 @@ endfunction
 autocmd FileType bufferselector nnoremap <buffer> q :close!<CR>
 autocmd FileType bufferselector nnoremap <buffer> <CR> :call SelectThisBuffer()<CR>
 
+set packpath^=~/.vim
+packadd minpac
+call minpac#init()
+call minpac#add('k-takata/minpac', {'type': 'opt'})
+call minpac#add('vim-jp/syntax-vim-ex')
+call minpac#add('cohama/lexima.vim')
+call minpac#add('editorconfig/editorconfig-vim')
+call minpac#add('ctrlpvim/ctrlp.vim')
+call minpac#add('l04m33/vlime')
+
+let g:lexima_enable_basic_rules=1
+let g:lexima_enable_newline_rules=1
+let g:lexima_enable_endwise_rules=1
+
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_open_new_file = 'r'
+let g:ctrlp_extensions = ['tag', 'quickfix', 'dir', 'line', 'mixed']
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:18'
+
+let g:vlime_leader = ","
+"let g:slimv_lisp = 'ros run'
+"let g:slimv_impl = 'sbcl'
+"let g:slimv_swank_cmd = "!ros -e '(ql:quickload :swank) (swank:create-server)' wait &"
+"let g:slimv_lisp = 'ros run'
+"let g:slimv_impl = 'sbcl'
+" let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"sbcl --load ~/.vim/slime/start-swank.lisp\""'
+
+call minpac#update()
+packloadall
+
 filetype plugin indent on
 filetype detect
 syntax on
