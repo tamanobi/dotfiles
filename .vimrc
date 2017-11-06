@@ -200,7 +200,9 @@ call minpac#add('vim-jp/syntax-vim-ex')
 call minpac#add('cohama/lexima.vim')
 call minpac#add('editorconfig/editorconfig-vim')
 call minpac#add('ctrlpvim/ctrlp.vim')
+call minpac#add('kovisoft/paredit')
 call minpac#add('l04m33/vlime')
+call minpac#add('scrooloose/nerdtree')
 
 let g:lexima_enable_basic_rules=1
 let g:lexima_enable_newline_rules=1
