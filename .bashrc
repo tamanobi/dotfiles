@@ -28,6 +28,7 @@ alias v="${MYVIM}"
 alias la='ls -CFal'
 alias g='git'
 alias gco="git checkout"
+alias gcm="git commit"
 alias gst="git status"
 alias gdf="git diff"
 alias gg="git grep -n"

@@ -200,9 +200,11 @@ call minpac#add('vim-jp/syntax-vim-ex')
 call minpac#add('cohama/lexima.vim')
 call minpac#add('editorconfig/editorconfig-vim')
 call minpac#add('ctrlpvim/ctrlp.vim')
+call minpac#add('kovisoft/paredit')
 call minpac#add('l04m33/vlime')
 call minpac#add('easymotion/vim-easymotion')
 call minpac#add('osyo-manga/vim-over')
+call minpac#add('scrooloose/nerdtree')
 
 nnoremap <silent> <Space>o :OverCommandLine<CR>%s//g<Left><Left>
 vnoremap <silent> <Space>o :OverCommandLine<CR>s//g<Left><Left>
@@ -233,12 +235,6 @@ let g:ctrlp_extensions = ['tag', 'quickfix', 'dir', 'line', 'mixed']
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:18'
 
 let g:vlime_leader = ","
-"let g:slimv_lisp = 'ros run'
-"let g:slimv_impl = 'sbcl'
-"let g:slimv_swank_cmd = "!ros -e '(ql:quickload :swank) (swank:create-server)' wait &"
-"let g:slimv_lisp = 'ros run'
-"let g:slimv_impl = 'sbcl'
-" let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"sbcl --load ~/.vim/slime/start-swank.lisp\""'
 
 call minpac#update()
 packloadall

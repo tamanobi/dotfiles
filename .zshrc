@@ -18,6 +18,8 @@ else
   export PAGER=/usr/bin/less
   export MANPAGER=/usr/bin/less
 fi
+export PATH=$HOME/.rbenv/bin:$PATH
+eval "$(rbenv init - zsh)"
 
 # -------------------------------------
 # zshのオプション
@@ -166,7 +168,7 @@ fi
 # -------------------------------------
 # エイリアス
 # -------------------------------------
-alias grep="grep --color -n -I -i --exclude='*.svn-*' --exclude='entries' --exclude='*/cache/*'"
+#alias grep="grep --color -n -I -i --exclude='*.svn-*' --exclude='entries' --exclude='*/cache/*'"
 alias e="emacs"
 alias vim="${MYVIM}"
 alias vi="${MYVIM}"
@@ -174,7 +176,6 @@ alias v="${MYVIM}"
 alias google="w3c"
 
 # ls
-alias ls="ls -G -F" # color for darwin
 alias l="ls -la"
 alias la="ls -la"
 alias l1="ls -1"
@@ -193,7 +194,6 @@ alias gls="git ls-files"
 alias gg="git grep -n -i"
 alias gcm="git commit"
 alias gs="git status"
-alias go="git checkout"
 alias gco="git checkout"
 alias gb="git branch"
 alias gbc='git for-each-ref --sort=-committerdate --format="%(refname:short)" refs/heads/'
@@ -203,6 +203,7 @@ alias -g S='`git stash list | peco --prompt "[GIT STASH]> " | cut -d: -f1`'
 #alias glg="git log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s"
 #alias gb="git for-each-ref --sort='-*committerdate' --format='%(refname:short)' refs/heads/"
 alias pd="popd"
+alias be='bundle exec'
 # -------------------------------------
 # キーバインド
 # -------------------------------------
@@ -240,7 +241,7 @@ function ptvim(){
 }
 
 function peco-dir-open-app () {
-    find . | peco -b 100 | xargs sh -c '${MYVIM} "$0" < /dev/tty'
+    find . | peco -b 1000 | xargs sh -c '${MYVIM} "$0" < /dev/tty'
     zle accept-line
     #zle clear-screen
 }
@@ -377,3 +378,19 @@ zle -N edit-command-buffer
 bindkey '^x^e' edit-command-buffer
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+export HISTFILE=${HOME}/.zsh_history
+
+# メモリに保存される履歴の件数
+export HISTSIZE=1000
+
+# 履歴ファイルに保存される履歴の件数
+export SAVEHIST=100000
+
+# 重複を記録しない
+setopt hist_ignore_dups
+
+# 開始と終了を記録
+setopt EXTENDED_HISTORY
+
+. /Users/yasu/torch/install/bin/torch-activate
