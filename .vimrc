@@ -201,6 +201,22 @@ call minpac#add('cohama/lexima.vim')
 call minpac#add('editorconfig/editorconfig-vim')
 call minpac#add('ctrlpvim/ctrlp.vim')
 call minpac#add('l04m33/vlime')
+call minpac#add('easymotion/vim-easymotion')
+
+" <Leader>f{char} to move to {char}
+map  <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+" s{char}{char} to move to {char}{char}
+nmap s <Plug>(easymotion-overwin-f2)
+" Move to line
+map <Leader>L <Plug>(easymotion-bd-jk)
+nmap <Leader>L <Plug>(easymotion-overwin-line)
+" Move to word
+map  <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>w <Plug>(easymotion-overwin-w)
+nmap g/ <Plug>(easymotion-sn)
+xmap g/ <Plug>(easymotion-sn)
+omap g/ <Plug>(easymotion-tn)
 
 let g:lexima_enable_basic_rules=1
 let g:lexima_enable_newline_rules=1
