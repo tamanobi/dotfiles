@@ -202,6 +202,11 @@ call minpac#add('editorconfig/editorconfig-vim')
 call minpac#add('ctrlpvim/ctrlp.vim')
 call minpac#add('l04m33/vlime')
 call minpac#add('easymotion/vim-easymotion')
+call minpac#add('osyo-manga/vim-over')
+
+nnoremap <silent> <Space>o :OverCommandLine<CR>%s//g<Left><Left>
+vnoremap <silent> <Space>o :OverCommandLine<CR>s//g<Left><Left>
+nnoremap sub :OverCommandLine<CR>%s/<C-r><C-w>//g<Left><Left>
 
 " <Leader>f{char} to move to {char}
 map  <Leader>f <Plug>(easymotion-bd-f)
