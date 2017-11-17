@@ -102,6 +102,7 @@ nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
+nnoremap n nzz
 " Tabpage
 nnoremap <C-k> :<C-u>tabp<CR>
 nnoremap <C-j> :<C-u>tabn<CR>
