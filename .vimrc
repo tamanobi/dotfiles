@@ -75,6 +75,7 @@ set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [line=%04l,%04v][%p%%]%=\
 " comand shortcut
 " -------------------------------------------------------------
 let mapleader = "\<Space>"
+noremap <Leader>  <Nop>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>v :vs<CR>
 nnoremap <Leader>g :grep <C-R>=expand("<cword>")<CR>
@@ -85,6 +86,9 @@ nnoremap <Leader>c :clist<CR>
 nnoremap <Leader>e :e<space>%:h<CR>
 nnoremap <Leader>b :buffers<CR>:buffer<SPACE>
 nnoremap <Leader>j :e <C-R>=expand('<cword>')<CR><CR>
+nnoremap <Leader>ss :source $MYVIMRC<Return>
+nnoremap <Leader>se :e <C-R>=expand('$MYVIMRC')<Return><Return>
+nnoremap <Leader>/ :nohlsearch<Return>
 nnoremap tj :tag<CR>
 nnoremap tk :pop<CR>
 nnoremap <silent> <Leader>, <C-z>
