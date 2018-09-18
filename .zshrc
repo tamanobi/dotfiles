@@ -117,7 +117,7 @@ function zle-line-init zle-keymap-select {
 "
   PROMPT+="%(?.%F{green}${OK}%f.%F{red}${NG}%f)"
   PROMPT+=" %% "
-  RPROMPT="[%D %*]"
+  # RPROMPT="[%D %*]"
 
   zle reset-prompt
 }
