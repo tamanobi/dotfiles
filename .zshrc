@@ -1,19 +1,14 @@
 # -------------------------------------
 # 環境変数
 # -------------------------------------
-# VIM
-if [ -f ~/mylib/vim/src/vim ]; then
-  export VIMRUNTIME=~/mylib/vim/runtime
-  export MYVIM="~/mylib/vim/src/vim"
-else
-  export MYVIM=/usr/local/bin/vim
-fi
+
+export MYVIM=/usr/local/bin/vim
 # エディタ
 export EDITOR="${MYVIM}"
 # ページャ
-if [ -f /usr/local/bin/vimpager ]; then
-  export PAGER=/usr/local/bin/vimpager
-  export MANPAGER=/usr/local/bin/vimpager
+if [ -f /usr/local/bin/view ]; then
+  export PAGER=/usr/local/bin/view
+  export MANPAGER=/usr/local/bin/view
 else
   export PAGER=/usr/bin/less
   export MANPAGER=/usr/bin/less
@@ -46,11 +41,11 @@ autoload -Uz colors
 colors
 # emacs 風キーバインドにする
 bindkey -e
-bindkey -v
 
-HISTFILE=$HOME/.zsh_history
-HISTSIZE=1000000
-sAVEHIST=1000000
+export HISTFILE=$HOME/.zsh_history
+export HISTSIZE=1000000
+export SAVEHIST=1000000
+
 # -------------------------------------
 # パス
 # -------------------------------------
@@ -216,10 +211,6 @@ zle -N cdup
 # -------------------------------------
 # その他
 # -------------------------------------
-
-# cdしたあとで、自動的に ls する
-function chpwd() { ls }
-
 # iTerm2のタブ名を変更する
 function title {
     echo -ne "\033]0;"$*"\007"
@@ -377,17 +368,6 @@ bindkey '^x^e' edit-command-buffer
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-export HISTFILE=${HOME}/.zsh_history
-
-# メモリに保存される履歴の件数
-export HISTSIZE=1000
-
-# 履歴ファイルに保存される履歴の件数
-export SAVEHIST=100000
-
-# 重複を記録しない
-setopt hist_ignore_dups
-
 # 開始と終了を記録
 setopt EXTENDED_HISTORY
 
@@ -398,3 +378,5 @@ export PATH="${GOPATH}/bin:$PATH"
 eval "$(pyenv init -)"
 export PATH=$HOME/.rbenv/bin:$PATH
 eval "$(rbenv init -)"
+
+export PATH="/Users/yasu/workspace/gcloud/google-cloud-sdk/bin:$PATH"
