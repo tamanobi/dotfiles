@@ -18,8 +18,6 @@ else
   export PAGER=/usr/bin/less
   export MANPAGER=/usr/bin/less
 fi
-export PATH=$HOME/.rbenv/bin:$PATH
-eval "$(rbenv init - zsh)"
 
 # -------------------------------------
 # zshのオプション
@@ -393,4 +391,10 @@ setopt hist_ignore_dups
 # 開始と終了を記録
 setopt EXTENDED_HISTORY
 
-. /Users/yasu/torch/install/bin/torch-activate
+export PYENV_ROOT="${HOME}/.pyenv"
+export PATH="${PYENV_ROOT}/bin:$PATH"
+export GOPATH="$HOME/go"
+export PATH="${GOPATH}/bin:$PATH"
+eval "$(pyenv init -)"
+export PATH=$HOME/.rbenv/bin:$PATH
+eval "$(rbenv init -)"
