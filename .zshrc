@@ -5,14 +5,8 @@
 export MYVIM=/usr/local/bin/vim
 # エディタ
 export EDITOR="${MYVIM}"
-# ページャ
-if [ -f /usr/local/bin/view ]; then
-  export PAGER=/usr/local/bin/view
-  export MANPAGER=/usr/local/bin/view
-else
-  export PAGER=/usr/bin/less
-  export MANPAGER=/usr/bin/less
-fi
+export PAGER=/usr/bin/less
+export MANPAGER=/usr/bin/less
 
 # -------------------------------------
 # zshのオプション
@@ -41,6 +35,8 @@ autoload -Uz colors
 colors
 # emacs 風キーバインドにする
 bindkey -e
+# 開始と終了を記録
+setopt EXTENDED_HISTORY
 
 export HISTFILE=$HOME/.zsh_history
 export HISTSIZE=1000000
@@ -183,6 +179,7 @@ alias t="tig"
 alias g="git"
 alias gti="git"
 alias gd="git diff"
+alias gdc="git diff --cached"
 alias gls="git ls-files"
 alias gg="git grep -n -i"
 alias gcm="git commit"
@@ -367,9 +364,6 @@ zle -N edit-command-buffer
 bindkey '^x^e' edit-command-buffer
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-# 開始と終了を記録
-setopt EXTENDED_HISTORY
 
 export PYENV_ROOT="${HOME}/.pyenv"
 export PATH="${PYENV_ROOT}/bin:$PATH"
