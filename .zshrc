@@ -3,6 +3,9 @@
 # -------------------------------------
 
 export MYVIM=/usr/local/bin/vim
+if [ -f $HOME/local/bin/vim ]; then
+    export MYVIM=$HOME/local/bin/vim
+fi
 # エディタ
 export EDITOR="${MYVIM}"
 export PAGER=/usr/bin/less
